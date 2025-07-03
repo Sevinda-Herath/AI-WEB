@@ -71,6 +71,18 @@ body {
 .nav {
     width: 100%;
     margin-top: 24px;
+    animation: fadeInDown 0.5s ease-in forwards;
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .nav-links {
@@ -86,23 +98,39 @@ body {
     display: flex;
     align-items: center;
     margin: 0 36px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in forwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .nav-links i {
     margin-right: 12px; 
     font-size: 1.5rem;
     color: #EBF1F7;
-
+    transition: transform 0.3s ease;
 }
 
 .nav-links a {
     font-family:'Ubuntu';
     text-decoration: none;
-    color: #222;
+    color: #EBF1F7;
     font-size: 1rem;
     padding: 8px 12px;
     border-radius: 4px;
-    color: #EBF1F7;
+    transition: background-color 0.3s;
+}
+
+.nav-links a:hover {
+    background-color: #25292E;
 }
 
 .nav-links a.active {
@@ -116,10 +144,22 @@ body {
     height: 3px;
     background-color: #F78166;
     position: absolute;
-    bottom: -10px;
+    bottom: -3px;
     border-radius: 20%;
     left: 100%;
     transform: translateX(-100%);
+}
+
+.main-nav-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+
+.pre-nav-hidden {
+    display: none;
 }
 
 .hr-line{
@@ -127,6 +167,7 @@ body {
     color: #42464b;
     background-color: #42464b;
     border: 0;
+    margin-top: 1px;
 }
 
 @media screen and (max-width: 768px) {
@@ -142,11 +183,11 @@ body {
 }
 
 /* Footer */
-footer{
+footer {
     position: absolute;
     display: inline-block;
     width: 100%;
-    bottom: 0;
+    bottom:1;
     left: 0;
     text-align: center;
     margin-top: 5%;
@@ -262,4 +303,9 @@ footer .wave#wave-4{
     .footer-line-2 a{
         font-size: 0.8rem;
     }
+}
+
+/* Main Content */
+.main-content{
+    height: 1000px;
 }
