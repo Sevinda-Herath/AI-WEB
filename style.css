@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+@font-face {
+    font-family: 'Framework Stonelabs Regular';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Framework Stonelabs Regular'), url('/fonts/FrameworkStonelabs-xRjRO.woff') format('woff');
+    }
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0D1117;
+    font-family: 'Montserrat';
+}
+
+/* Pre Nav */
+.pre-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px;
+    background-color: #25292E;
+    height: 48px;
+}
+
+.pre-nav-logo p {
+    margin: 0;
+    font-family: 'Framework Stonelabs Regular';
+    font-size: 2rem;
+    font-weight: 400;
+    color: #EBF1F7;
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+    text-decoration: none;
+
+}
+
+.pre-nav-links a {
+    color: #EBF1F7;
+    font-size: 1.8rem;
+    text-decoration: none;
+    transition: color 0.2s;
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards;
+}
+
+.pre-nav-links a:hover {
+    color: #6b61f8;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .pre-nav-links a {
+        font-size: 1.5rem;
+    }
+    .pre-nav-logo p {
+        font-size: 1.5rem;
+    }
+    
+}
+
+
+/* Main Nav */
+.nav {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links li {
+    display: flex;
+    align-items: center;
+    margin: 0 36px;
+}
+
+.nav-links i {
+    margin-right: 10px; /* Increased space between icon and text */
+    font-size: 1.5rem;
+    color: #EBF1F7;
+
+}
+
+.nav-links a {
+    font-family:Ubuntu;
+    text-decoration: none;
+    color: #222;
+    font-size: 1rem;
+    padding: 8px 12px;
+    transition: color 0.2s, background 0.2s;
+    border-radius: 4px;
+    color: #EBF1F7;
+
+}
+.hr-line{
+    height: 1px;
+    color: #42464b;
+    background-color: #42464b;
+    border: 0;
+}
