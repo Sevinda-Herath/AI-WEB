@@ -140,3 +140,126 @@ body {
         font-size: 0.9rem;
     }
 }
+
+/* Footer */
+footer{
+    position: absolute;
+    display: inline-block;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    margin-top: 5%;
+    padding-bottom: 1%;
+    background-color: #14181D;
+}
+footer ul li{
+    display: inline;
+}
+footer ul li a{
+    text-decoration: none;
+    margin: 1%;
+    color: #EBF1F7;
+    font-size: 0.9rem;
+    opacity: 1;
+}
+footer ul li a:hover{
+    opacity: 2;
+    color: #6b61f8;
+}
+.footer-line-1{
+    margin-top: 15px;
+}
+.footer-line-1 ul{
+    margin: 0;
+    padding: 0;
+}
+.footer-line-2 .logo-img{
+    margin-top: 15px;
+    width: 40px;
+    opacity: 1;
+}
+.footer-line-2 p{
+    color: #EBF1F7;
+    font-size: 0.9rem;
+    opacity: 1;
+}
+.footer-line-2 a{
+    text-decoration: none;
+    color: #6b61f8;
+    font-size: 0.9rem;
+    opacity: 1;
+}
+.footer-line-2 a:hover{
+    color: #EBF1F7;
+}
+footer .wave{
+    position: absolute;
+    top: -100px; ;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background:url('../img/wave.png') ;
+    background-size: 1000px 100px;
+    z-index: -9999;
+}
+footer .wave#wave-1{
+    z-index: 1000;
+    opacity: 1;
+    bottom: 0;
+    animation: animateWave 4s linear infinite;
+    z-index: -9999;
+}
+footer .wave#wave-2{
+    z-index: 999;
+    opacity: 0.5;
+    bottom: 10px;
+    animation: animateWave_02 4s linear infinite;
+    z-index: -9999;
+}
+footer .wave#wave-3{
+    z-index: 1000;
+    opacity: 0.2;
+    bottom: 15px;
+    animation: animateWave 3s linear infinite;
+    z-index: -9999;
+}
+footer .wave#wave-4{
+    z-index: 999;
+    opacity: 0.7;
+    bottom: 20px;
+    animation: animateWave_02 3s linear infinite;
+    z-index: -9999;
+}
+
+@keyframes animateWave {
+    0% {
+        background-position-x: 1000px;
+    }
+    100% {
+        background-position-x: 0px;
+    }
+}
+@keyframes animateWave_02 {
+    0% {
+        background-position-x: 0px;
+    }
+    100% {
+        background-position-x: 1000px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    footer ul li a{
+        font-size: 0.8rem;
+    }
+    .footer-line-2 .logo-img{
+        width: 30px;
+    }
+    .footer-line-2 p{
+        font-size: 0.8rem;
+    }
+    .footer-line-2 a{
+        font-size: 0.8rem;
+    }
+}
