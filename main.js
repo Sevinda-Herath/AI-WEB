@@ -1,7 +1,7 @@
 // Hide .pre-nav and pin .nav to the top on scroll And otherway around
 document.addEventListener('DOMContentLoaded', () => {
     let lastScroll = 0;
-    let threshold = 300;
+    let threshold = 200;
     const preNav = document.querySelector('.pre-nav');
     const mainNav = document.querySelector('.nav');
 
