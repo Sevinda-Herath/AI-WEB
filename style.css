@@ -7,6 +7,76 @@
     font-weight: normal;
     src: local('Framework Stonelabs Regular'), url('/fonts/FrameworkStonelabs-xRjRO.woff') format('woff');
     }
+/* Scroll Bar */
+::-webkit-scrollbar{
+    behavior: smooth;
+}
+::selection{
+    background-color: #6b61f8;
+    color: #0D1117;
+}
+
+/* Mouse Effect */
+.spark{
+    z-index: -1;
+    position: absolute;
+    pointer-events: none;
+    animation: animate-1 2s linear forwards;
+    font-size: 6px;
+    font-weight: bold;
+    color: #6b61f8;
+    text-shadow: 0 0 4px rgba(107, 97, 248, 0.6);
+}
+@keyframes animate-1{
+    0%{
+        opacity: 1;
+        transform: translate(0,0);
+    }
+    100%{
+        opacity: 0;
+        transform: translate(var(--x),var(--y));
+    }
+}
+.spark1{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transform: translateY(-20px);
+}
+.spark1 span{
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    pointer-events: none;
+    transform-origin: bottom;
+    filter: drop-shadow(0 0 10px #6b61f8) drop-shadow(0 0 20px #6b61f8);
+    box-shadow: 0 0 20px #6b61f8, 0 0 40px #6b61f8;
+}
+.spark1 span::before{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #6b61f8;
+    animation: animate-2 2s ease-in-out forwards;
+
+}
+@keyframes animate-2{
+    0%{
+        transform: translateY(100%);
+    }
+    100%{
+        transform: translateY(1500%);
+    }
+
+}
+
+html{
+    cursor: url('/img/arrow.png'), auto;
+    scroll-behavior: smooth;
+    scrollbar-color: #6b61f8 #0D1117;
+    overflow-x: hidden;
+}
 
 body {
     margin: 0;
@@ -17,14 +87,20 @@ body {
 
 /* Pre Nav */
 .pre-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px 24px;
     background-color: #25292E;
     height: 48px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(0);
+    opacity: 1;
 }
-
 .pre-nav-logo p {
     margin: 0;
     font-family: 'Framework Stonelabs Regular';
@@ -34,10 +110,9 @@ body {
     opacity: 0;
     animation: fadeIn 1s ease-in forwards;
     text-decoration: none;
-
 }
-
 .pre-nav-links a {
+    margin-right: 50px;
     color: #EBF1F7;
     font-size: 1.8rem;
     text-decoration: none;
@@ -45,11 +120,9 @@ body {
     opacity: 0;
     animation: fadeIn 1s ease-in forwards;
 }
-
 .pre-nav-links a:hover {
     color: #6b61f8;
 }
-
 @keyframes fadeIn {
     to {
         opacity: 1;
@@ -66,12 +139,15 @@ body {
     
 }
 
-
 /* Main Nav */
 .nav {
+    position: fixed;
+    top: 75px;
+    left: 0;
     width: 100%;
     margin-top: 24px;
     animation: fadeInDown 0.5s ease-in forwards;
+    transition: top 0.3s ease-in-out;
 }
 
 @keyframes fadeInDown {
@@ -93,7 +169,6 @@ body {
     padding: 0;
     margin: 0;
 }
-
 .nav-links li {
     display: flex;
     align-items: center;
@@ -118,7 +193,6 @@ body {
     color: #EBF1F7;
     transition: transform 0.3s ease;
 }
-
 .nav-links a {
     font-family:'Ubuntu';
     text-decoration: none;
@@ -128,15 +202,12 @@ body {
     border-radius: 4px;
     transition: background-color 0.3s;
 }
-
 .nav-links a:hover {
     background-color: #25292E;
 }
-
 .nav-links a.active {
     position: relative;
 }
-
 .nav-links a.active::after {
     content: '';
     display: block;
@@ -156,10 +227,13 @@ body {
     left: 0;
     width: 100%;
     z-index: 999;
+    background-color: #0D1117;
+    transition: top 0.3s ease-in-out;
 }
-
 .pre-nav-hidden {
-    display: none;
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .hr-line{
@@ -289,7 +363,6 @@ footer .wave#wave-4{
         background-position-x: 1000px;
     }
 }
-
 @media screen and (max-width: 768px) {
     footer ul li a{
         font-size: 0.8rem;
