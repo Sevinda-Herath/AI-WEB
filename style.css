@@ -5,7 +5,7 @@
     font-family: 'Framework Stonelabs Regular';
     font-style: normal;
     font-weight: normal;
-    src: local('Framework Stonelabs Regular'), url('/fonts/FrameworkStonelabs-xRjRO.woff') format('woff');
+    src: local('Framework Stonelabs Regular'), url('./fonts/FrameworkStonelabs-xRjRO.woff') format('woff');
     }
 /* Scroll Bar */
 ::-webkit-scrollbar{
@@ -72,7 +72,7 @@
 }
 
 html{
-    cursor: url('/img/arrow.png'), auto;
+    cursor: url('./img/arrow.png'), auto;
     scroll-behavior: smooth;
     scrollbar-color: #6b61f8 #0D1117;
     overflow-x: hidden;
@@ -318,7 +318,7 @@ footer .wave{
     left: 0;
     width: 100%;
     height: 100px;
-    background:url('../img/wave.png') ;
+    background:url('./img/wave.png') ;
     background-size: 1000px 100px;
     z-index: -9999;
 }
