@@ -141,11 +141,13 @@ body {
 
 /* Main Nav */
 .nav {
+    background-color: #0D1117;
     position: fixed;
-    top: 70px;
+    top: 50px;
     left: 0;
     width: 100%;
     margin-top: 20px;
+    padding-top: 20px;
     animation: fadeInDown 0.5s ease-in forwards;
     transition: top 0.3s ease-in-out;
 }
@@ -225,6 +227,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
+    padding-top: 20px;
+    margin: 0;
     width: 100%;
     z-index: 999;
     background-color: #0D1117;
