@@ -1,0 +1,326 @@
+/* Architecture Section */
+.architecture {
+    padding: 60px 40px;
+    margin-top: 120px;
+    text-align: center;
+}
+
+.architecture h2 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 2.5rem;
+    color: #EBF1F7;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-in forwards;
+}
+
+.architecture-flow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.architecture-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 250px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideInUp 0.8s ease-out forwards;
+}
+
+.architecture-step[data-step="1"] {
+    animation-delay: 0.5s;
+}
+
+.architecture-step[data-step="3"] {
+    animation-delay: 1.5s;
+}
+
+.architecture-step[data-step="5"] {
+    animation-delay: 2.5s;
+}
+
+.arch-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #6b61f8, #9d55ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(107, 97, 248, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.arch-icon:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(107, 97, 248, 0.5);
+}
+
+.arch-icon i {
+    font-size: 2.4rem;
+    color: #ffffff;
+}
+
+.arch-description h3 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.4rem;
+    color: #EBF1F7;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+
+.arch-description p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.95rem;
+    color: #8B949E;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.arrow-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: bounceIn 0.6s ease-out forwards;
+}
+
+.arrow-container[data-step="2"] {
+    animation-delay: 1s;
+}
+
+.arrow-container[data-step="4"] {
+    animation-delay: 2s;
+}
+
+.arrow-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.arrow {
+    color: #6b61f8;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.arrow-incoming {
+    animation: arrowFlowIn 2s ease-in-out infinite;
+}
+
+.arrow-outgoing {
+    animation: arrowFlowOut 2s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+/* Data Transfer Highlight Animation */
+.architecture-step {
+    transition: all 0.8s ease;
+}
+
+.architecture-step.data-highlight {
+    opacity: 1 !important;
+    transform: scale(1.05);
+    filter: brightness(1.2);
+}
+
+.architecture-step.data-dimmed {
+    opacity: 0.3 !important;
+}
+
+@keyframes arrowFlowIn {
+    0%, 100% {
+        opacity: 0.4;
+        transform: translateX(-15px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes arrowFlowOut {
+    0%, 100% {
+        opacity: 0.4;
+        transform: translateX(15px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Media-specific arrow animations for screens 1080px and below */
+@media screen and (max-width: 1080px) {
+    @keyframes arrowFlowIn {
+        0%, 100% {
+            opacity: 0.4;
+            transform: translateY(-15px);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes arrowFlowOut {
+        0%, 100% {
+            opacity: 0.4;
+            transform: translateY(15px);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design for Architecture Section */
+@media screen and (max-width: 768px) {
+    .architecture {
+        padding: 40px 20px;
+        margin-top: 100px;
+    }
+    
+    .architecture h2 {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+    
+    .architecture-flow {
+        flex-direction: column;
+        gap: 40px;
+    }
+    
+    .arrow-flow {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .arrow-container .arrow {
+        font-size: 1.3rem;
+    }
+    
+    .arch-icon {
+        width: 85px;
+        height: 85px;
+    }
+    
+    .arch-icon i {
+        font-size: 2rem;
+    }
+    
+    .arch-description h3 {
+        font-size: 1.2rem;
+    }
+    
+    .arch-description p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Larger Responsive Design for Architecture Section (up to 1080px) */
+@media screen and (min-width: 769px) and (max-width: 1080px) {
+    .architecture {
+        padding: 50px 30px;
+        margin-top: 110px;
+    }
+
+    .architecture h2 {
+        font-size: 2.2rem;
+        margin-bottom: 50px;
+    }
+
+    .architecture-flow {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .arrow-flow {
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .arch-icon {
+        width: 110px;
+        height: 110px;
+    }
+
+    .arch-icon i {
+        font-size: 2.6rem;
+    }
+
+    .arch-description h3 {
+        font-size: 1.25rem;
+    }
+
+    .arch-description p {
+        font-size: 1rem;
+    }
+
+    .arrow {
+        font-size: 1.7rem;
+    }
+}
