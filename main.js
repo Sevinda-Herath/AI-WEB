@@ -49,3 +49,156 @@ function getRandomTransitionValue(){
     return `${Math.random() * 75 - 10}px`;
 }
 document.addEventListener("mousemove", spark);
+
+// Architecture Animation Enhancement
+document.addEventListener('DOMContentLoaded', () => {
+    // Intersection Observer for Architecture Animation
+    const architectureObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add a delay before starting the sequential animation
+                setTimeout(() => {
+                    startArchitectureAnimation();
+                    // Start data transfer animation after architecture animation
+                    startDataTransferAnimation();
+                }, 200);
+                architectureObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.3
+    });
+
+    // Observe the architecture section
+    const architectureSection = document.querySelector('.architecture');
+    if (architectureSection) {
+        architectureObserver.observe(architectureSection);
+    }
+
+    function startArchitectureAnimation() {
+        const steps = document.querySelectorAll('.architecture-step');
+        const arrows = document.querySelectorAll('.arrow-container');
+
+        // Reset all elements
+        [...steps, ...arrows].forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+        });
+
+        // Animate elements in sequence
+        animateElement(steps[0], 0);
+        animateElement(arrows[0], 500);
+        animateElement(steps[1], 1000);
+        animateElement(arrows[1], 1500);
+        animateElement(steps[2], 2000);
+    }
+
+    function animateElement(element, delay) {
+        if (!element) return;
+        
+        setTimeout(() => {
+            element.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+            
+            // Add a subtle bounce effect for icons
+            if (element.classList.contains('architecture-step')) {
+                const icon = element.querySelector('.arch-icon');
+                if (icon) {
+                    setTimeout(() => {
+                        icon.style.animation = 'bounceIcon 0.6s ease-out';
+                    }, 400);
+                }
+            }
+        }, delay);
+    }
+
+    // Add hover effects for architecture steps
+    const archSteps = document.querySelectorAll('.architecture-step');
+    archSteps.forEach(step => {
+        step.addEventListener('mouseenter', () => {
+            const icon = step.querySelector('.arch-icon');
+            if (icon) {
+                icon.style.transform = 'translateY(-5px) scale(1.05)';
+                icon.style.boxShadow = '0 15px 40px rgba(107, 97, 248, 0.5)';
+            }
+        });
+
+        step.addEventListener('mouseleave', () => {
+            const icon = step.querySelector('.arch-icon');
+            if (icon) {
+                icon.style.transform = 'translateY(0) scale(1)';
+                icon.style.boxShadow = '0 10px 30px rgba(107, 97, 248, 0.3)';
+            }
+        });
+    });
+
+    // Arrow Flow Animation Enhancement
+    const arrowContainers = document.querySelectorAll('.arrow-container');
+    arrowContainers.forEach(container => {
+        container.addEventListener('mouseenter', () => {
+            const arrows = container.querySelectorAll('.arrow');
+            arrows.forEach(arrow => {
+                arrow.style.animationDuration = '0.5s';
+                arrow.style.color = '#9d55ff';
+            });
+        });
+
+        container.addEventListener('mouseleave', () => {
+            const arrows = container.querySelectorAll('.arrow');
+            arrows.forEach(arrow => {
+                arrow.style.animationDuration = '2s';
+                arrow.style.color = '#6b61f8';
+            });
+        });
+    });
+});
+
+// Data Transfer Flow Animation
+function startDataTransferAnimation() {
+    const steps = document.querySelectorAll('.architecture-step');
+    const totalSteps = steps.length;
+    let currentStep = 0;
+
+    function highlightStep() {
+        // Reset all steps
+        steps.forEach(step => {
+            step.classList.remove('data-highlight', 'data-dimmed');
+            step.classList.add('data-dimmed');
+        });
+
+        // Highlight current step
+        if (steps[currentStep]) {
+            steps[currentStep].classList.remove('data-dimmed');
+            steps[currentStep].classList.add('data-highlight');
+        }
+
+        // Move to next step
+        currentStep = (currentStep + 1) % totalSteps;
+
+        // Continue the animation
+        setTimeout(highlightStep, 2000);
+    }
+
+    // Start the highlighting animation after initial architecture animation completes
+    setTimeout(() => {
+        highlightStep();
+    }, 3000);
+}
+
+// Add bounceIcon keyframe animation via JavaScript
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes bounceIcon {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-10px);
+        }
+        60% {
+            transform: translateY(-5px);
+        }
+    }
+`;
+document.head.appendChild(style);
