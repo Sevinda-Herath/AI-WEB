@@ -202,3 +202,35 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Responsive Arrow Direction Handler
+document.addEventListener('DOMContentLoaded', () => {
+    function updateArrowDirections() {
+        const incomingArrows = document.querySelectorAll('.arrow-incoming i');
+        const outgoingArrows = document.querySelectorAll('.arrow-outgoing i');
+        
+        if (window.innerWidth <= 1080) {
+            // For screens 1080px and below, use vertical arrows
+            incomingArrows.forEach(arrow => {
+                arrow.className = 'fa fa-arrow-down';
+            });
+            outgoingArrows.forEach(arrow => {
+                arrow.className = 'fa fa-arrow-up';
+            });
+        } else {
+            // For screens above 1080px, use horizontal arrows
+            incomingArrows.forEach(arrow => {
+                arrow.className = 'fa fa-arrow-right';
+            });
+            outgoingArrows.forEach(arrow => {
+                arrow.className = 'fa fa-arrow-left';
+            });
+        }
+    }
+
+    // Update arrows on initial load
+    updateArrowDirections();
+
+    // Update arrows on window resize
+    window.addEventListener('resize', updateArrowDirections);
+});

@@ -385,11 +385,6 @@ footer .wave#wave-4{
     }
 }
 
-/* Main Content */
-.main-content{
-    height: 1000px;
-}
-
 /* Architecture Section */
 .architecture {
     padding: 60px 40px;
@@ -410,8 +405,8 @@ footer .wave#wave-4{
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px;
-    max-width: 1200px;
+    gap: 60px;
+    max-width: 1400px;
     margin: 0 auto;
     flex-wrap: wrap;
 }
@@ -440,8 +435,8 @@ footer .wave#wave-4{
 }
 
 .arch-icon {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     background: linear-gradient(135deg, #6b61f8, #9d55ff);
     border-radius: 50%;
     display: flex;
@@ -458,7 +453,7 @@ footer .wave#wave-4{
 }
 
 .arch-icon i {
-    font-size: 2rem;
+    font-size: 2.4rem;
     color: #ffffff;
 }
 
@@ -553,6 +548,31 @@ footer .wave#wave-4{
     }
 }
 
+/* Media-specific arrow animations for screens 1080px and below */
+@media screen and (max-width: 1080px) {
+    @keyframes arrowFlowIn {
+        0%, 100% {
+            opacity: 0.4;
+            transform: translateY(-15px);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes arrowFlowOut {
+        0%, 100% {
+            opacity: 0.4;
+            transform: translateY(15px);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
 @keyframes fadeInUp {
     0% {
         opacity: 0;
@@ -618,7 +638,7 @@ footer .wave#wave-4{
     
     .architecture-flow {
         flex-direction: column;
-        gap: 30px;
+        gap: 40px;
     }
     
     .arrow-flow {
@@ -627,17 +647,16 @@ footer .wave#wave-4{
     }
     
     .arrow-container .arrow {
-        transform: rotate(90deg);
         font-size: 1.3rem;
     }
     
     .arch-icon {
-        width: 70px;
-        height: 70px;
+        width: 85px;
+        height: 85px;
     }
     
     .arch-icon i {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
     
     .arch-description h3 {
@@ -662,16 +681,22 @@ footer .wave#wave-4{
     }
 
     .architecture-flow {
-        gap: 35px;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .arrow-flow {
+        flex-direction: row;
+        gap: 10px;
     }
 
     .arch-icon {
-        width: 90px;
-        height: 90px;
+        width: 110px;
+        height: 110px;
     }
 
     .arch-icon i {
-        font-size: 2.2rem;
+        font-size: 2.6rem;
     }
 
     .arch-description h3 {
