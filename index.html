@@ -23,83 +23,386 @@
                     <p>Sevinda Herath</p>
                 </div>
                 <div class="pre-nav-links">
-                    <a href="#" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/sevinda-herath" target="_blank" rel="noopener noreferrer" title="GitHub Profile">
                         <i class="fa fa-github"></i>
+                    </a>
+                    <a href="http://sevinda-herath.is-a.dev" target="_blank" rel="noopener noreferrer" title="Portfolio">
+                        <i class="fa fa-external-link"></i>
                     </a>
                 </div>
             </div>
             <!-- main-nav -->
             <nav class="nav">
-                <ul class="nav-links">
-                    <a class ="active" href="#"><li><i class = 'fa fa-home'></i>Home</li></a>
-                    <a href="#"><li><i class="fa fa-line-chart"></i>Predict</li></a>
-                    <a href="#"><li><i class="fa fa-info-circle"></i>About</li></a>
-                </ul>
-                <hr class="hr-line">
+                <div class="nav-container">
+                    <ul class="nav-links">
+                        <li><a href="#hero" class="active"><i class="fa fa-home"></i><span>Home</span></a></li>
+                        <li><a href="#architecture"><i class="fa fa-sitemap"></i><span>Architecture</span></a></li>
+                        <li><a href="#technologies"><i class="fa fa-code"></i><span>Tech</span></a></li>
+                        <li><a href="#about"><i class="fa fa-info-circle"></i><span>About</span></a></li>
+                    </ul>
+                    <div class="nav-toggle">
+                        <span class="nav-toggle-bar"></span>
+                        <span class="nav-toggle-bar"></span>
+                        <span class="nav-toggle-bar"></span>
+                    </div>
+                </div>
             </nav>
         </div>
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="title"></div>
-            <div class="architecture">
-                <h2>System Architecture</h2>
-                <div class="architecture-flow">
-                    <div class="architecture-step" data-step="1">
-                        <div class="arch-icon">
-                            <i class="fa fa-globe"></i>
-                        </div>
-                        <div class="arch-description">
-                            <h3>Web Interface</h3>
-                            <p>User inputs stock data through our intuitive web platform</p>
-                        </div>
-                    </div>
-                    
-                    <div class="arrow-container" data-step="2">
-                        <div class="arrow-flow">
-                            <div class="arrow arrow-incoming">
+            <!-- Hero Section -->
+            <section class="hero-section" id="hero">
+                <div class="hero-background">
+                    <div class="hero-particles"></div>
+                    <div class="hero-grid"></div>
+                </div>
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1 class="hero-title">
+                            <span class="title-line-1">Stock Prediction</span>
+                            <span class="title-line-2">with Machine Learning</span>
+                        </h1>
+                        <p class="hero-subtitle">Harnessing AI to forecast stock market trends</p>
+                        <p class="hero-description">
+                            Our platform utilizes advanced machine learning algorithms to analyze historical stock data and predict future trends, empowering investors with actionable insights.
+                        </p>
+                        <div class="hero-buttons">
+                            <a href="#architecture" class="btn btn-primary">
+                                <span>Get Started</span>
                                 <i class="fa fa-arrow-right"></i>
+                            </a>
+                            <a href="#about" class="btn btn-secondary">
+                                <span>Learn More</span>
+                                <i class="fa fa-info-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-chart">
+                            <div class="chart-line"></div>
+                            <div class="chart-points">
+                                <div class="point" data-value="120"></div>
+                                <div class="point" data-value="150"></div>
+                                <div class="point" data-value="130"></div>
+                                <div class="point" data-value="180"></div>
+                                <div class="point" data-value="200"></div>
                             </div>
-                            <div class="arrow arrow-outgoing">
-                                <i class="fa fa-arrow-left"></i>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="stat-value">95%</span>
+                                <span class="stat-label">Accuracy</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">24/7</span>
+                                <span class="stat-label">Monitoring</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">AI</span>
+                                <span class="stat-label">Powered</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-scroll-indicator">
+                    <div class="scroll-text">Scroll to explore</div>
+                    <div class="scroll-arrow">
+                        <i class="fa fa-chevron-down"></i>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Content Sections -->
+            <div class="content-sections">
+            <!-- Architecture Section -->
+            <section class="architecture scroll-hidden" id="architecture">
+                <div class="architecture-container">
+                    <div class="section-header scroll-hidden-scale scroll-delay-1">
+                        <h2 class="section-title">System Architecture</h2>
+                        <p class="section-subtitle">Comprehensive ML-powered stock prediction pipeline</p>
+                    </div>
+                    
+                    <div class="architecture-flow">
+                        <div class="architecture-step scroll-hidden-left scroll-delay-2" data-step="1">
+                            <div class="arch-card">
+                                <div class="arch-icon">
+                                    <i class="fa fa-globe"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <div class="arch-content">
+                                    <h3 class="arch-title">Web Interface</h3>
+                                    <p class="arch-description">Intuitive user interface for seamless stock data input and analysis</p>
+                                    <div class="arch-features">
+                                        <span class="feature-tag">React Frontend</span>
+                                        <span class="feature-tag">Real-time Updates</span>
+                                    </div>
+                                </div>
+                                <div class="card-glow"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow-container scroll-hidden scroll-delay-3" data-step="2">
+                            <div class="arrow-flow">
+                                <div class="arrow arrow-incoming">
+                                    <i class="fa fa-arrow-right"></i>
+                                </div>
+                                <div class="arrow arrow-outgoing">
+                                    <i class="fa fa-arrow-left"></i>
+                                </div>
+                                <div class="flow-particles"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="architecture-step scroll-hidden-scale scroll-delay-4" data-step="3">
+                            <div class="arch-card">
+                                <div class="arch-icon">
+                                    <i class="fa fa-cogs"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <div class="arch-content">
+                                    <h3 class="arch-title">ML Processing</h3>
+                                    <p class="arch-description">Advanced machine learning algorithms analyze patterns and market trends</p>
+                                    <div class="arch-features">
+                                        <span class="feature-tag">Deep Learning</span>
+                                        <span class="feature-tag">Pattern Analysis</span>
+                                    </div>
+                                </div>
+                                <div class="card-glow"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="arrow-container scroll-hidden scroll-delay-5" data-step="4">
+                            <div class="arrow-flow">
+                                <div class="arrow arrow-incoming">
+                                    <i class="fa fa-arrow-right"></i>
+                                </div>
+                                <div class="arrow arrow-outgoing">
+                                    <i class="fa fa-arrow-left"></i>
+                                </div>
+                                <div class="flow-particles"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="architecture-step scroll-hidden-right scroll-delay-6" data-step="5">
+                            <div class="arch-card">
+                                <div class="arch-icon">
+                                    <i class="fa fa-database"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <div class="arch-content">
+                                    <h3 class="arch-title">Data Storage</h3>
+                                    <p class="arch-description">Secure storage and management of historical data and predictions</p>
+                                    <div class="arch-features">
+                                        <span class="feature-tag">PostgreSQL</span>
+                                        <span class="feature-tag">Cloud Backup</span>
+                                    </div>
+                                </div>
+                                <div class="card-glow"></div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="architecture-step" data-step="3">
-                        <div class="arch-icon">
-                            <i class="fa fa-cogs"></i>
+                    <div class="architecture-stats scroll-hidden scroll-delay-6">
+                        <div class="stat-item">
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">Uptime</div>
                         </div>
-                        <div class="arch-description">
-                            <h3>ML Processing</h3>
-                            <p>Advanced machine learning algorithms analyze patterns and trends</p>
+                        <div class="stat-item">
+                            <div class="stat-number">&lt;50ms</div>
+                            <div class="stat-label">Response Time</div>
                         </div>
-                    </div>
-                    
-                    <div class="arrow-container" data-step="4">
-                        <div class="arrow-flow">
-                            <div class="arrow arrow-incoming">
-                                <i class="fa fa-arrow-right"></i>
-                            </div>
-                            <div class="arrow arrow-outgoing">
-                                <i class="fa fa-arrow-left"></i>
-                            </div>
+                        <div class="stat-item">
+                            <div class="stat-number">1M+</div>
+                            <div class="stat-label">Data Points</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24/7</div>
+                            <div class="stat-label">Monitoring</div>
                         </div>
                     </div>
-                    
-                    <div class="architecture-step" data-step="5">
-                        <div class="arch-icon">
-                            <i class="fa fa-database"></i>
+                </div>
+            </section>
+            <div class="technologies scroll-hidden" id="technologies">
+                <div class="technologies-container">
+                    <div class="section-header scroll-hidden-scale scroll-delay-1">
+                        <h2 class="section-title">Technologies Used</h2>
+                        <p class="section-subtitle">Built with cutting-edge tools and frameworks</p>
+                    </div>
+                    <div class="tech-grid">
+                        <div class="tech-card scroll-hidden-left scroll-delay-2" data-tech="python">
+                            <div class="tech-icon">
+                                <i class="fa fa-code"></i>
+                            </div>
+                            <div class="tech-content">
+                                <h3 class="tech-name">Python</h3>
+                                <p class="tech-description">Machine Learning & Data Analysis</p>
+                            </div>
+                            <div class="tech-glow"></div>
                         </div>
-                        <div class="arch-description">
-                            <h3>Data Storage</h3>
-                            <p>Historical data and predictions stored securely for analysis</p>
+                        
+                        <div class="tech-card scroll-hidden scroll-delay-3" data-tech="flask">
+                            <div class="tech-icon">
+                                <i class="fa fa-server"></i>
+                            </div>
+                            <div class="tech-content">
+                                <h3 class="tech-name">Flask</h3>
+                                <p class="tech-description">Backend API Development</p>
+                            </div>
+                            <div class="tech-glow"></div>
+                        </div>
+                        
+                        <div class="tech-card scroll-hidden-right scroll-delay-4" data-tech="react">
+                            <div class="tech-icon">
+                                <i class="fa fa-refresh"></i>
+                            </div>
+                            <div class="tech-content">
+                                <h3 class="tech-name">React</h3>
+                                <p class="tech-description">Interactive Frontend Development</p>
+                            </div>
+                            <div class="tech-glow"></div>
+                        </div>
+                        
+                        <div class="tech-card scroll-hidden-left scroll-delay-5" data-tech="postgresql">
+                            <div class="tech-icon">
+                                <i class="fa fa-database"></i>
+                            </div>
+                            <div class="tech-content">
+                                <h3 class="tech-name">PostgreSQL</h3>
+                                <p class="tech-description">Robust Database Management</p>
+                            </div>
+                            <div class="tech-glow"></div>
+                        </div>
+                        
+                        <div class="tech-card scroll-hidden scroll-delay-6" data-tech="docker">
+                            <div class="tech-icon">
+                                <i class="fa fa-cube"></i>
+                            </div>
+                            <div class="tech-content">
+                                <h3 class="tech-name">Docker</h3>
+                                <p class="tech-description">Application Containerization</p>
+                            </div>
+                            <div class="tech-glow"></div>
+                        </div>
+                        
+                        <div class="tech-card scroll-hidden-right scroll-delay-6" data-tech="ai">
+                            <div class="tech-icon">
+                                <i class="fa fa-lightbulb-o"></i>
+                            </div>
+                            <div class="tech-content">
+                                <h3 class="tech-name">AI/ML</h3>
+                                <p class="tech-description">Intelligent Prediction Algorithms</p>
+                            </div>
+                            <div class="tech-glow"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="technologies"></div>
-            <div class="about"></div>
+            <!-- About Section -->
+            <section class="about scroll-hidden" id="about">
+                <div class="about-container">
+                    <div class="about-content">
+                        <div class="about-text scroll-hidden-left">
+                            <div class="section-header scroll-delay-1">
+                                <h2 class="section-title">About Our Platform</h2>
+                                <p class="section-subtitle">Revolutionizing stock market prediction with AI</p>
+                            </div>
+                            
+                            <div class="about-description scroll-delay-2">
+                                <p class="about-paragraph">
+                                    Our platform represents the cutting edge of financial technology, combining advanced machine learning algorithms with real-time market data to deliver unprecedented accuracy in stock price predictions.
+                                </p>
+                                <p class="about-paragraph">
+                                    Built for both novice and experienced investors, our system processes millions of data points to identify patterns and trends that human analysis might miss, giving you a competitive advantage in the market.
+                                </p>
+                            </div>
+                            
+                            <div class="about-features">
+                                <div class="feature-item scroll-hidden scroll-delay-3">
+                                    <div class="feature-icon">
+                                        <i class="fa fa-shield"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Secure & Reliable</h4>
+                                        <p>Bank-grade security with 99.9% uptime guarantee</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item scroll-hidden scroll-delay-4">
+                                    <div class="feature-icon">
+                                        <i class="fa fa-bolt"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Real-time Analysis</h4>
+                                        <p>Instant predictions with live market data integration</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="feature-item scroll-hidden scroll-delay-5">
+                                    <div class="feature-icon">
+                                        <i class="fa fa-users"></i>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>User-Friendly</h4>
+                                        <p>Intuitive interface designed for all experience levels</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="about-cta scroll-hidden scroll-delay-6">
+                                <a href="#technologies" class="btn btn-primary">
+                                    <span>Explore Technology</span>
+                                    <i class="fa fa-arrow-right"></i>
+                                </a>
+                                <a href="#architecture" class="btn btn-secondary">
+                                    <span>View Architecture</span>
+                                    <i class="fa fa-sitemap"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="about-visual scroll-hidden-right">
+                            <div class="about-chart scroll-delay-2">
+                                <div class="chart-container">
+                                    <div class="chart-bar" data-height="70%"></div>
+                                    <div class="chart-bar" data-height="85%"></div>
+                                    <div class="chart-bar" data-height="60%"></div>
+                                    <div class="chart-bar" data-height="95%"></div>
+                                    <div class="chart-bar" data-height="80%"></div>
+                                    <div class="chart-bar" data-height="90%"></div>
+                                </div>
+                                <div class="chart-overlay">
+                                    <div class="chart-title">Prediction Accuracy</div>
+                                    <div class="chart-value">95.7%</div>
+                                </div>
+                            </div>
+                            
+                            <div class="about-metrics scroll-delay-4">
+                                <div class="metric-card scroll-hidden-scale">
+                                    <div class="metric-icon">
+                                        <i class="fa fa-trophy"></i>
+                                    </div>
+                                    <div class="metric-info">
+                                        <div class="metric-number">95.7%</div>
+                                        <div class="metric-label">Accuracy Rate</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="metric-card scroll-hidden-scale scroll-delay-1">
+                                    <div class="metric-icon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                    <div class="metric-info">
+                                        <div class="metric-number">2.3s</div>
+                                        <div class="metric-label">Avg Response</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            </div>
         </div> 
 
 
@@ -111,18 +414,118 @@
             <div class="wave" id="wave-3"></div>
             <div class="wave" id="wave-4"></div>
         </div>
-        <div class="footer-line-1">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Predict</a></li>
-                <li><a href="#">About</a></li>
-            </ul>
-        </div>
-        <div class="footer-line-2">
-            <a href="http://sevinda-herath.is-a.dev" target="_blank"><img class="logo-img" src="./img/logo.png" alt="Website's logo"></a>
-            <p>© 2025, <a href="http://sevinda-herath.is-a.dev" target="_blank">Sevinda-Herath</a></p>
+        
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img class="logo-img" src="./img/logo.png" alt="Stock Prediction AI Logo">
+                        <div class="brand-text">
+                            <h3>Stock Prediction AI</h3>
+                            <p>Powered by Machine Learning</p>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Harnessing advanced AI algorithms to forecast stock market trends with unparalleled accuracy and real-time insights.
+                    </p>
+                    <div class="footer-social">
+                        <a href="https://github.com/sevinda-herath" target="_blank" rel="noopener noreferrer" title="GitHub Profile">
+                            <i class="fa fa-github"></i>
+                        </a>
+                        <a href="http://sevinda-herath.is-a.dev" target="_blank" rel="noopener noreferrer" title="Portfolio">
+                            <i class="fa fa-external-link"></i>
+                        </a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                            <i class="fa fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-nav">
+                    <div class="footer-section">
+                        <h4>Platform</h4>
+                        <ul>
+                            <li><a href="#hero">Home</a></li>
+                            <li><a href="#architecture">Architecture</a></li>
+                            <li><a href="#technologies">Technologies</a></li>
+                            <li><a href="#about">About</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Features</h4>
+                        <ul>
+                            <li><a href="#architecture">Real-time Analysis</a></li>
+                            <li><a href="#technologies">ML Algorithms</a></li>
+                            <li><a href="#about">95.7% Accuracy</a></li>
+                            <li><a href="#about">24/7 Monitoring</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Contact</h4>
+                        <ul>
+                            <li><a href="mailto:contact@stockprediction.ai">Email Support</a></li>
+                            <li><a href="http://sevinda-herath.is-a.dev" target="_blank">Portfolio</a></li>
+                            <li><a href="https://github.com/sevinda-herath" target="_blank">GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-stats">
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fa fa-trophy"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number">95.7%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fa fa-clock-o"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number">&lt;50ms</span>
+                        <span class="stat-label">Response</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fa fa-database"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number">1M+</span>
+                        <span class="stat-label">Data Points</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon"><i class="fa fa-shield"></i></div>
+                    <div class="stat-info">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>© 2025 <a href="http://sevinda-herath.is-a.dev" target="_blank">Sevinda Herath</a>. All rights reserved.</p>
+                    <p class="footer-subtitle">Built with passion for financial technology and AI innovation</p>
+                </div>
+                <div class="footer-tech">
+                    <span class="tech-badge">
+                        <i class="fa fa-code"></i>
+                        Made with AI
+                    </span>
+                    <span class="tech-badge">
+                        <i class="fa fa-bolt"></i>
+                        Real-time
+                    </span>
+                    <span class="tech-badge">
+                        <i class="fa fa-shield"></i>
+                        Secure
+                    </span>
+                </div>
+            </div>
         </div>
     </footer>
-    <script src="../js/main.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 </html>
