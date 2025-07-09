@@ -1321,35 +1321,6 @@ footer .wave#wave-4{
     }
 }
 
-@media (max-width: 575px) {
-    .nav-links li {
-        margin: 0 8px;
-    }
-    
-    .nav-links a {
-        font-size: 0.8rem;
-        padding: 5px 8px;
-    }
-    
-    .nav-links i {
-        font-size: 1rem;
-        margin-right: 5px;
-    }
-    
-    .pre-nav {
-        padding: 8px 15px;
-        height: 40px;
-    }
-    
-    .pre-nav-links a {
-        margin-right: 20px;
-        font-size: 1.2rem;
-    }
-    
-    .pre-nav-logo p {
-        font-size: 1.3rem;
-    }
-}
 
 /* Landscape orientation adjustments */
 @media (max-height: 600px) and (orientation: landscape) {
