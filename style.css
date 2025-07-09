@@ -827,13 +827,551 @@ footer .wave#wave-4{
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-    .hero h1 { font-size: 2.5rem; }
-    .hero-subtitle { font-size: 1.1rem; }
-    .hero-features { flex-direction: column; gap: 20px; }
-    .architecture-flow { flex-direction: column; }
-    .flow-arrow { transform: rotate(90deg); }
-    .about-content { grid-template-columns: 1fr; }
-    .project-stats { grid-template-columns: 1fr; }
-    .tech-grid { grid-template-columns: 1fr; }
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+    .section-container {
+        max-width: 1400px;
+    }
+    
+    .hero h1 {
+        font-size: 4rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+    }
+    
+    .tech-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .project-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Medium to large screens (992px to 1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+    .section-container {
+        max-width: 1000px;
+    }
+    
+    .hero {
+        padding: 60px 0 100px;
+        margin: 0 15px 50px;
+    }
+    
+    .hero h1 {
+        font-size: 3.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.25rem;
+    }
+    
+    .tech-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+    
+    .project-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+    
+    .section-card {
+        padding: 35px;
+    }
+}
+
+/* Tablets (768px to 991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+    .main-content {
+        padding: 100px 15px 0;
+    }
+    
+    .hero {
+        padding: 50px 0 80px;
+        margin: 0 10px 40px;
+    }
+    
+    .hero h1 {
+        font-size: 2.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.15rem;
+    }
+    
+    .hero-features {
+        flex-wrap: wrap;
+        gap: 25px;
+    }
+    
+    .feature-item {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .architecture-flow {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .flow-arrow {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .project-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .section-card {
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .btn {
+        padding: 15px 35px;
+        font-size: 1rem;
+    }
+}
+
+/* Mobile landscape and small tablets (576px to 767px) */
+@media (max-width: 767px) and (min-width: 576px) {
+    .main-content {
+        padding: 90px 10px 0;
+    }
+    
+    .hero {
+        padding: 40px 0 60px;
+        margin: 0 5px 30px;
+    }
+    
+    .hero h1 {
+        font-size: 2.3rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.05rem;
+        margin-bottom: 30px;
+    }
+    
+    .hero-features {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .feature-item {
+        padding: 10px 18px;
+        font-size: 0.85rem;
+        min-width: 200px;
+    }
+    
+    .architecture-flow {
+        flex-direction: column;
+        gap: 25px;
+    }
+    
+    .flow-arrow {
+        transform: rotate(90deg);
+        margin: 5px 0;
+    }
+    
+    .flow-item {
+        padding: 25px 15px;
+    }
+    
+    .flow-item h4 {
+        font-size: 1.1rem;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .project-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 20px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .tech-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .tech-item {
+        padding: 25px;
+    }
+    
+    .tech-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+    
+    .section-card {
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+    
+    .section-card h2 {
+        font-size: 1.8rem;
+    }
+    
+    .card-header {
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .section-icon {
+        font-size: 2rem;
+    }
+    
+    .btn {
+        padding: 14px 30px;
+        font-size: 0.95rem;
+    }
+    
+    .profile-card {
+        padding: 30px;
+    }
+    
+    .profile-avatar {
+        font-size: 4rem;
+    }
+    
+    .social-links {
+        gap: 10px;
+    }
+    
+    .social-link {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Mobile portrait (up to 575px) */
+@media (max-width: 575px) {
+    .main-content {
+        padding: 80px 5px 0;
+    }
+    
+    .hero {
+        padding: 30px 0 50px;
+        margin: 0 5px 20px;
+        border-radius: 15px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.1;
+        margin-bottom: 15px;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 25px;
+        padding: 0 10px;
+    }
+    
+    .hero-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .hero-features {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    
+    .feature-item {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+        min-width: 180px;
+        border-radius: 20px;
+    }
+    
+    .feature-item i {
+        font-size: 1rem;
+    }
+    
+    .architecture-flow {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .flow-arrow {
+        transform: rotate(90deg);
+        margin: 0;
+    }
+    
+    .flow-item {
+        padding: 20px 10px;
+    }
+    
+    .flow-item h4 {
+        font-size: 1rem;
+    }
+    
+    .flow-item p {
+        font-size: 0.8rem;
+    }
+    
+    .flow-icon {
+        font-size: 2.5rem;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+    
+    .project-stats {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .stat-item {
+        padding: 15px;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .tech-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .tech-item {
+        padding: 20px;
+    }
+    
+    .tech-item h4 {
+        font-size: 1.2rem;
+    }
+    
+    .tech-item p {
+        font-size: 0.85rem;
+    }
+    
+    .tech-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .section-card {
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 15px;
+    }
+    
+    .section-card h2 {
+        font-size: 1.5rem;
+    }
+    
+    .card-header {
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .section-icon {
+        font-size: 1.8rem;
+    }
+    
+    .card-content p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+    
+    .btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+        gap: 8px;
+    }
+    
+    .profile-card {
+        padding: 25px;
+    }
+    
+    .profile-card h4 {
+        font-size: 1.3rem;
+    }
+    
+    .profile-card p {
+        font-size: 0.9rem;
+    }
+    
+    .profile-avatar {
+        font-size: 3.5rem;
+    }
+    
+    .social-links {
+        gap: 8px;
+    }
+    
+    .social-link {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small devices (up to 375px) */
+@media (max-width: 375px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .hero-icon {
+        font-size: 2.5rem;
+    }
+    
+    .feature-item {
+        min-width: 160px;
+        font-size: 0.75rem;
+    }
+    
+    .section-card {
+        padding: 15px;
+    }
+    
+    .section-card h2 {
+        font-size: 1.3rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .flow-item {
+        padding: 15px 8px;
+    }
+    
+    .tech-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .profile-avatar {
+        font-size: 3rem;
+    }
+}
+
+/* Navigation responsive enhancements */
+@media (max-width: 991px) {
+    .nav-links li {
+        margin: 0 20px;
+    }
+    
+    .nav-links a {
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+    
+    .nav-links i {
+        font-size: 1.2rem;
+        margin-right: 8px;
+    }
+}
+
+@media (max-width: 575px) {
+    .nav-links li {
+        margin: 0 8px;
+    }
+    
+    .nav-links a {
+        font-size: 0.8rem;
+        padding: 5px 8px;
+    }
+    
+    .nav-links i {
+        font-size: 1rem;
+        margin-right: 5px;
+    }
+    
+    .pre-nav {
+        padding: 8px 15px;
+        height: 40px;
+    }
+    
+    .pre-nav-links a {
+        margin-right: 20px;
+        font-size: 1.2rem;
+    }
+    
+    .pre-nav-logo p {
+        font-size: 1.3rem;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero {
+        padding: 20px 0 40px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .hero-features {
+        margin-bottom: 20px;
+    }
+    
+    .section-card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
 }
