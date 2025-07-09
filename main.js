@@ -227,3 +227,89 @@ glitchStyles.textContent = `
     }
 `;
 document.head.appendChild(glitchStyles);
+
+// Initialize Three.js icon in hero section
+function initThreeIcon() {
+    const canvas = document.getElementById('three-icon');
+    if (!canvas) return;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 0.1, 100);
+    camera.position.set(0, 0, 5);
+
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+    renderer.setSize(canvas.width, canvas.height);
+
+    // Build a line chart geometry with streaming data
+    const pointCount = 30;
+    const spacing = 0.3;
+    const positions = new Float32Array(pointCount * 3);
+    const initialY = () => Math.sin(Math.random() * 2 * Math.PI) * 1.2;
+    for (let i = 0; i < pointCount; i++) {
+        positions[i * 3] = (i - pointCount / 2) * spacing;
+        positions[i * 3 + 1] = initialY();
+        positions[i * 3 + 2] = 0;
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    const material = new THREE.LineBasicMaterial({ color: 0x6b61f8, linewidth: 2, transparent: true });
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+
+    // Add data point markers
+    // Helper: create circular texture for point markers
+    function generateCircleTexture(color = '#ffffff', size = 64) {
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+        return new THREE.CanvasTexture(canvas);
+    }
+
+    const circleTex = generateCircleTexture('#6b61f8');
+    const pointsMaterial = new THREE.PointsMaterial({ map: circleTex, size: 0.5, alphaTest: 0.5, transparent: true });
+    const pointsMesh = new THREE.Points(geometry, pointsMaterial);
+    scene.add(pointsMesh);
+
+    // Add axes
+    const axisMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.5, transparent: true });
+    // X Axis
+    const xAxisPoints = [
+        new THREE.Vector3(-pointCount/2 * spacing, 0, 0),
+        new THREE.Vector3(pointCount/2 * spacing, 0, 0)
+    ];
+    const xAxis = new THREE.Line(new THREE.BufferGeometry().setFromPoints(xAxisPoints), axisMaterial);
+    scene.add(xAxis);
+    // Y Axis
+    const yAxisPoints = [
+        new THREE.Vector3(0, -1.5, 0),
+        new THREE.Vector3(0, 1.5, 0)
+    ];
+    const yAxis = new THREE.Line(new THREE.BufferGeometry().setFromPoints(yAxisPoints), axisMaterial);
+    scene.add(yAxis);
+
+    let tick = 0; // for throttling updates
+
+    function animateIcon() {
+        requestAnimationFrame(animateIcon);
+        tick++;
+        if (tick % 20 === 0) { // update every 20 frames
+            // shift Y values left
+            for (let i = 0; i < pointCount - 1; i++) {
+                positions[i * 3 + 1] = positions[(i + 1) * 3 + 1];
+            }
+            // add new random value at end
+            const newY = Math.sin(Date.now() * 0.002) * 1.2 + (Math.random() - 0.5) * 0.2;
+            positions[(pointCount - 1) * 3 + 1] = newY;
+            geometry.attributes.position.needsUpdate = true;
+        }
+        renderer.render(scene, camera);
+    }
+    animateIcon();
+}
+document.addEventListener('DOMContentLoaded', initThreeIcon);
