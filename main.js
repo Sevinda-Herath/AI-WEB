@@ -313,3 +313,265 @@ function initThreeIcon() {
     animateIcon();
 }
 document.addEventListener('DOMContentLoaded', initThreeIcon);
+
+// About page specific functionality
+document.addEventListener('DOMContentLoaded', () => {
+    // Only run about page scripts if we're on the about page
+    if (window.location.pathname.includes('about.html') || document.querySelector('.about-content')) {
+        initAboutPageAnimations();
+    }
+});
+
+function initAboutPageAnimations() {
+    // Animate stat numbers when they come into view
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateStatNumber(entry.target);
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    // Observe all stat numbers
+    const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+    statNumbers.forEach(stat => statsObserver.observe(stat));
+
+    // Add floating animation to about cards on scroll
+    const aboutCardsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = entry.target.style.animation + ', float 3s ease-in-out infinite';
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const aboutCards = document.querySelectorAll('.about-card');
+    aboutCards.forEach(card => aboutCardsObserver.observe(card));
+
+    // Timeline animation
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const timelineItems = entry.target.querySelectorAll('.timeline-item');
+                timelineItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateX(0)';
+                        item.style.transition = 'all 0.6s ease-out';
+                    }, index * 300);
+                });
+                timelineObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+
+    const timeline = document.querySelector('.timeline');
+    if (timeline) {
+        // Initially hide timeline items
+        const timelineItems = timeline.querySelectorAll('.timeline-item');
+        timelineItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(-50px)';
+        });
+        timelineObserver.observe(timeline);
+    }
+
+    // Future items staggered animation
+    const futureObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const futureItems = entry.target.querySelectorAll('.future-item');
+                futureItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.opacity = '1';
+                        item.style.transform = 'translateY(0)';
+                        item.style.transition = 'all 0.6s ease-out';
+                    }, index * 200);
+                });
+                futureObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const futureGrid = document.querySelector('.future-grid');
+    if (futureGrid) {
+        // Initially hide future items
+        const futureItems = futureGrid.querySelectorAll('.future-item');
+        futureItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px)';
+        });
+        futureObserver.observe(futureGrid);
+    }
+
+    // Add interactive effects to skill tags
+    const skillTags = document.querySelectorAll('.skill-tag');
+    skillTags.forEach(tag => {
+        tag.addEventListener('mouseenter', () => {
+            tag.style.transform = 'translateY(-3px) scale(1.05)';
+            tag.style.boxShadow = '0 5px 15px rgba(107, 97, 248, 0.3)';
+        });
+        
+        tag.addEventListener('mouseleave', () => {
+            tag.style.transform = 'translateY(0) scale(1)';
+            tag.style.boxShadow = 'none';
+        });
+    });
+
+    // Add parallax effect to floating elements
+    const floatingElements = document.querySelectorAll('.float-item');
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        floatingElements.forEach((element, index) => {
+            const speed = 0.1 + (index * 0.05);
+            element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+        });
+    });
+
+    // Add typewriter effect to hero title
+    const heroTitle = document.querySelector('.hero-text h1');
+    if (heroTitle) {
+        typeWriterEffect(heroTitle, 'About This Project', 100);
+    }
+
+    // Developer card hover effect
+    const developerCard = document.querySelector('.developer-card');
+    if (developerCard) {
+        developerCard.addEventListener('mouseenter', () => {
+            const avatar = developerCard.querySelector('.avatar-placeholder');
+            if (avatar) {
+                avatar.style.transform = 'scale(1.1) rotate(5deg)';
+                avatar.style.transition = 'transform 0.3s ease';
+            }
+        });
+        
+        developerCard.addEventListener('mouseleave', () => {
+            const avatar = developerCard.querySelector('.avatar-placeholder');
+            if (avatar) {
+                avatar.style.transform = 'scale(1) rotate(0deg)';
+            }
+        });
+    }
+}
+
+function animateStatNumber(element) {
+    const target = parseInt(element.getAttribute('data-target'));
+    const duration = 2000;
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = start;
+    
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        
+        // Format different types of numbers
+        if (target === 95) {
+            element.textContent = Math.floor(current) + '%';
+        } else if (target === 1000) {
+            element.textContent = Math.floor(current).toLocaleString() + '+';
+        } else if (target === 24) {
+            element.textContent = Math.floor(current) + '/7';
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, 16);
+    
+    // Add scale animation
+    element.style.animation = 'countUp 2s ease-out';
+}
+
+function typeWriterEffect(element, text, speed = 100) {
+    const originalText = element.textContent;
+    element.textContent = '';
+    let i = 0;
+    
+    function type() {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+        }
+    }
+    
+    setTimeout(type, 500); // Small delay before starting
+}
+
+// Add tilt effect to cards
+document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.about-card, .developer-card, .future-item');
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+        });
+    });
+});
+
+// Add sparkle effect when clicking on elements
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.about-card, .developer-card, .future-item, .skill-tag')) {
+        createSparkleEffect(e.pageX, e.pageY);
+    }
+});
+
+function createSparkleEffect(x, y) {
+    for (let i = 0; i < 6; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle-effect';
+        sparkle.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            width: 6px;
+            height: 6px;
+            background: #6b61f8;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            animation: sparkleExplosion 0.8s ease-out forwards;
+            transform: rotate(${i * 60}deg);
+        `;
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => {
+            if (sparkle.parentElement) {
+                document.body.removeChild(sparkle);
+            }
+        }, 800);
+    }
+}
+
+// Add sparkle animation CSS
+const sparkleStyles = document.createElement('style');
+sparkleStyles.textContent = `
+    @keyframes sparkleExplosion {
+        0% {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(50px) scale(0);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(sparkleStyles);
