@@ -102,7 +102,7 @@ if (aboutSection) {
             if (entry.isIntersecting) {
                 const statNumbers = entry.target.querySelectorAll('.stat-number');
                 statNumbers.forEach((stat, index) => {
-                    const targets = [10000, 95, 24];
+                    const targets = [5000, 75, 24];
                     setTimeout(() => {
                         animateCounter(stat, targets[index]);
                     }, index * 200);
