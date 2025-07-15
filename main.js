@@ -1,21 +1,65 @@
 // Hide .pre-nav and pin .nav to the top on scroll And otherway around
 document.addEventListener('DOMContentLoaded', () => {
     let lastScroll = 0;
-    let threshold = 200;
+    let threshold = 100; // Reduced threshold for better responsiveness
     const preNav = document.querySelector('.pre-nav');
     const mainNav = document.querySelector('.nav');
+    const hero = document.querySelector('.hero');
+
+    // Function to adjust hero spacing based on navigation state
+    const adjustHeroSpacing = () => {
+        if (!hero) return;
+        
+        const screenWidth = window.innerWidth;
+        const preNavHeight = preNav ? preNav.offsetHeight : 0;
+        const mainNavHeight = mainNav ? mainNav.offsetHeight : 0;
+        
+        // Calculate required spacing
+        let requiredSpacing = preNavHeight + mainNavHeight + 30; // 30px buffer
+        
+        // Adjust based on screen size
+        if (screenWidth >= 1200) {
+            requiredSpacing = Math.max(requiredSpacing, 150);
+        } else if (screenWidth >= 992) {
+            requiredSpacing = Math.max(requiredSpacing, 140);
+        } else if (screenWidth >= 768) {
+            requiredSpacing = Math.max(requiredSpacing, 120);
+        }
+        
+        // Apply the spacing
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.style.paddingTop = `${requiredSpacing}px`;
+        }
+    };
 
     window.addEventListener('scroll', () => {
         const currentScroll = window.pageYOffset;
+        
+        // Add smooth transition class
+        if (preNav && !preNav.style.transition) {
+            preNav.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out';
+        }
+        if (mainNav && !mainNav.style.transition) {
+            mainNav.style.transition = 'top 0.3s ease-in-out';
+        }
+        
         if (currentScroll > threshold && currentScroll > lastScroll) {
-            preNav.classList.add('pre-nav-hidden');
-            mainNav.classList.add('main-nav-fixed');
+            if (preNav) preNav.classList.add('pre-nav-hidden');
+            if (mainNav) mainNav.classList.add('main-nav-fixed');
         } else if (currentScroll < lastScroll) {
-            preNav.classList.remove('pre-nav-hidden');
-            mainNav.classList.remove('main-nav-fixed');
+            if (preNav) preNav.classList.remove('pre-nav-hidden');
+            if (mainNav) mainNav.classList.remove('main-nav-fixed');
         }
         lastScroll = currentScroll;
     });
+
+    // Initial adjustment and on resize
+    adjustHeroSpacing();
+    window.addEventListener('resize', adjustHeroSpacing);
+    
+    // Adjust after a short delay to ensure DOM is fully loaded
+    setTimeout(adjustHeroSpacing, 100);
 });
 
 
