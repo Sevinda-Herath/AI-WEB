@@ -1,5 +1,5 @@
 // Predict Section JavaScript
-const API_BASE_URL = 'http://0.0.0.0:8000';
+const API_BASE_URL = 'http://162.243.175.58:8000';
 
 // Initialize the predict section
 document.addEventListener('DOMContentLoaded', function() {
