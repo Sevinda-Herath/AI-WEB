@@ -7,6 +7,8 @@
     <link rel="icon" href="./img/logo.png" type="image/x-icon">
 
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./predict.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <!-- Main Content -->
@@ -37,7 +39,202 @@
         </div>
 
         <!-- Predict Content -->
-        <div class="predict-content"></div>
+        <div class="predict-content">
+            <!-- Floating Particles Background -->
+            <div class="floating-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+
+            <!-- Hero Section -->
+            <section class="predict-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">Stock Prediction with AI</h1>
+                    <p class="hero-subtitle">Advanced LSTM models with sentiment analysis for accurate stock predictions</p>
+                </div>
+                <div class="hero-animation">
+                    <div class="floating-chart"></div>
+                </div>
+            </section>
+
+            <!-- Stock Selector -->
+            <section class="stock-selector">
+                <div class="selector-container">
+                    <h2>Select Stock Symbol</h2>
+                    <div class="stock-grid">
+                        <div class="stock-card" data-symbol="AMZN">
+                            <div class="stock-icon">📦</div>
+                            <h3>Amazon</h3>
+                            <p>AMZN</p>
+                        </div>
+                        <div class="stock-card" data-symbol="AAPL">
+                            <div class="stock-icon">🍎</div>
+                            <h3>Apple</h3>
+                            <p>AAPL</p>
+                        </div>
+                        <div class="stock-card" data-symbol="GOOGL">
+                            <div class="stock-icon">🔍</div>
+                            <h3>Alphabet</h3>
+                            <p>GOOGL</p>
+                        </div>
+                        <div class="stock-card" data-symbol="005930.KS">
+                            <div class="stock-icon">📱</div>
+                            <h3>Samsung</h3>
+                            <p>005930.KS</p>
+                        </div>
+                        <div class="stock-card" data-symbol="2317.TW">
+                            <div class="stock-icon">🏭</div>
+                            <h3>Foxconn</h3>
+                            <p>2317.TW</p>
+                        </div>
+                        <div class="stock-card" data-symbol="MSFT">
+                            <div class="stock-icon">💻</div>
+                            <h3>Microsoft</h3>
+                            <p>MSFT</p>
+                        </div>
+                        <div class="stock-card" data-symbol="JD">
+                            <div class="stock-icon">🛒</div>
+                            <h3>JD.com</h3>
+                            <p>JD</p>
+                        </div>
+                        <div class="stock-card" data-symbol="BABA">
+                            <div class="stock-icon">🏪</div>
+                            <h3>Alibaba</h3>
+                            <p>BABA</p>
+                        </div>
+                        <div class="stock-card" data-symbol="T">
+                            <div class="stock-icon">📞</div>
+                            <h3>AT&T</h3>
+                            <p>T</p>
+                        </div>
+                        <div class="stock-card" data-symbol="META">
+                            <div class="stock-icon">📘</div>
+                            <h3>Meta</h3>
+                            <p>META</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Prediction Controls -->
+            <section class="prediction-controls">
+                <div class="controls-container">
+                    <h2>Prediction Settings</h2>
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label for="days-input">Prediction Days</label>
+                            <input type="number" id="days-input" min="1" max="30" value="7" />
+                        </div>
+                        <div class="control-group">
+                            <label for="model-type">Model Type</label>
+                            <select id="model-type">
+                                <option value="lstm">LSTM (Price Only)</option>
+                                <option value="lstm_sentiment">LSTM + Sentiment</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <button id="predict-btn" class="predict-button">
+                                <span class="btn-text">Predict</span>
+                                <div class="btn-loader"></div>
+                            </button>
+                        </div>
+                        <div class="control-group">
+                            <button id="test-api-btn" class="test-button">
+                                <span class="btn-text">Test API</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Debug Panel -->
+                    <div class="debug-panel">
+                        <h3>Debug Information</h3>
+                        <div class="debug-content">
+                            <div class="debug-item">
+                                <span class="debug-label">Selected Symbol:</span>
+                                <span id="debug-symbol">None</span>
+                            </div>
+                            <div class="debug-item">
+                                <span class="debug-label">API Status:</span>
+                                <span id="debug-api-status">Testing...</span>
+                            </div>
+                            <div class="debug-item">
+                                <span class="debug-label">Last Request:</span>
+                                <span id="debug-last-request">None</span>
+                            </div>
+                            <div class="debug-item">
+                                <span class="debug-label">Console:</span>
+                                <div id="debug-console"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="results-section">
+                <div class="results-container">
+                    <h2>Prediction Results</h2>
+                    
+                    <!-- Sentiment Analysis -->
+                    <div class="result-card sentiment-card">
+                        <h3>Sentiment Analysis</h3>
+                        <div class="sentiment-content">
+                            <div class="sentiment-summary" id="sentiment-summary">
+                                <div class="loading-placeholder">Loading sentiment data...</div>
+                            </div>
+                            <div class="chart-download">
+                                <a href="#" id="sentiment-chart-download" class="download-btn">
+                                    📊 Download Sentiment Chart
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Model Performance -->
+                    <div class="result-card metrics-card">
+                        <h3>Model Performance</h3>
+                        <div class="metrics-content">
+                            <div class="metrics-grid" id="metrics-grid">
+                                <div class="loading-placeholder">Loading model metrics...</div>
+                            </div>
+                            <div class="chart-downloads">
+                                <a href="#" id="test-predictions-download" class="download-btn">
+                                    📈 Test Predictions Chart
+                                </a>
+                                <a href="#" id="training-loss-download" class="download-btn">
+                                    📉 Training Loss Chart
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Prediction Results -->
+                    <div class="result-card prediction-card">
+                        <h3>Price Predictions</h3>
+                        <div class="prediction-content">
+                            <div class="prediction-grid" id="prediction-grid">
+                                <div class="loading-placeholder">Run prediction to see results...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loading Overlay -->
+            <div class="loading-overlay" id="loading-overlay">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <p>Processing prediction...</p>
+                </div>
+            </div>
+        </div>
 
     <footer>
         <div class="waves">
