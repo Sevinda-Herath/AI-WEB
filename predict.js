@@ -5,6 +5,7 @@ const API_BASE_URL = 'http://162.243.175.58:8000';
 document.addEventListener('DOMContentLoaded', function() {
     initializePredictSection();
     setupEventListeners();
+    initializeStockButtons();
     createPredictIcon();
 });
 
@@ -18,13 +19,21 @@ function initializePredictSection() {
     if (resultCard) resultCard.style.display = 'none';
     if (loadingSpinner) loadingSpinner.style.display = 'none';
     
+    // Initialize analytics section - hidden by default
+    const analyticsSection = document.querySelector('.analytics-section');
+    if (analyticsSection) {
+        analyticsSection.style.display = 'none';
+        analyticsSection.style.opacity = '0';
+        analyticsSection.style.transform = 'translateY(-10px)';
+    }
+    
     // Initialize sentiment section visibility
     initializeSentimentSection();
 }
 
 function setupEventListeners() {
     const predictBtn = document.getElementById('predict-btn');
-    const stockSelect = document.getElementById('stock-select');
+    const stockButtons = document.querySelectorAll('.stock-btn');
     const modelSelect = document.getElementById('model-select');
     const downloadMetrics = document.getElementById('download-metrics');
     const viewCharts = document.getElementById('view-charts');
@@ -36,9 +45,10 @@ function setupEventListeners() {
         predictBtn.addEventListener('click', handlePrediction);
     }
 
-    if (stockSelect) {
-        stockSelect.addEventListener('change', handleStockChange);
-    }
+    // Handle stock button selection
+    stockButtons.forEach(button => {
+        button.addEventListener('click', handleStockButtonClick);
+    });
 
     if (modelSelect) {
         modelSelect.addEventListener('change', handleModelChange);
@@ -66,7 +76,7 @@ function setupEventListeners() {
 }
 
 async function handlePrediction() {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     const days = document.getElementById('days-input').value;
     const model = document.getElementById('model-select').value;
 
@@ -106,6 +116,9 @@ async function handlePrediction() {
         displayPredictionResult(data);
         await loadModelMetrics(stockSymbol, model);
         
+        // Show analytics section after prediction
+        showAnalyticsSection();
+        
         // Show success message
         showAlert(`Prediction completed successfully for ${stockSymbol}!`, 'success');
         
@@ -118,7 +131,7 @@ async function handlePrediction() {
 }
 
 async function handleStockChange() {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     const model = document.getElementById('model-select').value;
     
     // Only show sentiment data if LSTM+Sentiment model is selected
@@ -133,7 +146,7 @@ async function handleStockChange() {
 }
 
 async function handleModelChange() {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     const model = document.getElementById('model-select').value;
     
     // Show/hide sentiment section based on model selection
@@ -222,13 +235,24 @@ async function loadModelMetrics(symbol, model) {
         enableDownloadButton('download-loss-chart');
         hideMetricsLoading();
         
+        // Scroll to metrics section for better UX
+        setTimeout(() => {
+            const metricsCard = document.getElementById('metrics-card');
+            if (metricsCard) {
+                metricsCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }, 500);
+        
     } catch (error) {
         console.error('Metrics loading error:', error);
-        document.getElementById('metrics-display').innerHTML = 
-            `<div class="error-message">
-                <p>❌ Metrics data not available for ${symbol}</p>
-                <p class="error-details">${error.message}</p>
-            </div>`;
+        const metricsDisplay = document.getElementById('metrics-display');
+        if (metricsDisplay) {
+            metricsDisplay.innerHTML = 
+                `<div class="error-message">
+                    <p>❌ Metrics data not available for ${symbol}</p>
+                    <p class="error-details">${error.message}</p>
+                </div>`;
+        }
         hideMetricsLoading();
     }
 }
@@ -381,6 +405,23 @@ function displayMetricsData(data) {
                 </div>
             </div>
         `;
+        
+        // Ensure the metrics display is visible
+        metricsDisplay.style.display = 'block';
+        metricsDisplay.style.opacity = '1';
+        
+        // Add animation for better UX
+        const metricsData = metricsDisplay.querySelector('.metrics-data');
+        if (metricsData) {
+            metricsData.style.opacity = '0';
+            metricsData.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                metricsData.style.opacity = '1';
+                metricsData.style.transform = 'translateY(0)';
+                metricsData.style.transition = 'all 0.5s ease';
+            }, 100);
+        }
     }
 }
 
@@ -401,7 +442,7 @@ function clearSentimentData() {
 
 function initializeSentimentSection() {
     const model = document.getElementById('model-select').value;
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     
     if (model === 'lstm_sentiment') {
         showSentimentSection();
@@ -477,7 +518,7 @@ function disableDownloadButton(buttonId) {
 }
 
 async function downloadChart(type) {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     const model = document.getElementById('model-select').value;
     
     if (!stockSymbol || stockSymbol.trim() === '') {
@@ -547,7 +588,7 @@ async function downloadChart(type) {
 }
 
 function handleDownloadMetrics() {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     const model = document.getElementById('model-select').value;
     
     if (!stockSymbol || stockSymbol.trim() === '') {
@@ -607,7 +648,7 @@ function handleDownloadMetrics() {
 }
 
 function handleViewCharts() {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     
     if (!stockSymbol) {
         showAlert('Please select a stock symbol first', 'error');
@@ -785,7 +826,7 @@ document.addEventListener('keydown', function(event) {
 
 // Add form validation helper
 function validateForm() {
-    const stockSymbol = document.getElementById('stock-select').value;
+    const stockSymbol = getSelectedStockSymbol();
     const days = document.getElementById('days-input').value;
     const model = document.getElementById('model-select').value;
     
@@ -802,11 +843,16 @@ function validateForm() {
 
 // Add input listeners for real-time validation
 document.addEventListener('DOMContentLoaded', function() {
-    const stockSelect = document.getElementById('stock-select');
+    const stockButtons = document.querySelectorAll('.stock-btn');
     const daysInput = document.getElementById('days-input');
     const modelSelect = document.getElementById('model-select');
     
-    [stockSelect, daysInput, modelSelect].forEach(element => {
+    // Add event listeners for stock buttons
+    stockButtons.forEach(button => {
+        button.addEventListener('click', validateForm);
+    });
+    
+    [daysInput, modelSelect].forEach(element => {
         if (element) {
             element.addEventListener('input', validateForm);
             element.addEventListener('change', validateForm);
@@ -821,3 +867,102 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeSentimentSection();
     }, 100);
 });
+
+function handleStockButtonClick(event) {
+    const button = event.currentTarget;
+    const symbol = button.getAttribute('data-symbol');
+    const name = button.getAttribute('data-name');
+    
+    // Remove selection from all buttons
+    const allButtons = document.querySelectorAll('.stock-btn');
+    allButtons.forEach(btn => btn.classList.remove('selected'));
+    
+    // Add selection to clicked button
+    button.classList.add('selected');
+    
+    // Update hidden input value
+    const hiddenInput = document.getElementById('stock-select');
+    if (hiddenInput) {
+        hiddenInput.value = symbol;
+    }
+    
+    // Show selection feedback
+    showAlert(`Selected ${symbol} - ${name}`, 'success');
+    
+    // Trigger stock change logic
+    handleStockChange();
+    
+    // Validate form
+    validateForm();
+}
+
+function initializeStockButtons() {
+    const stockButtons = document.querySelectorAll('.stock-btn');
+    
+    stockButtons.forEach(button => {
+        // Add click event listener
+        button.addEventListener('click', handleStockButtonClick);
+        
+        // Add keyboard support
+        button.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                handleStockButtonClick(event);
+            }
+        });
+        
+        // Make buttons focusable
+        button.setAttribute('tabindex', '0');
+    });
+}
+
+// Initialize stock buttons on page load
+document.addEventListener('DOMContentLoaded', initializeStockButtons);
+
+function getSelectedStockSymbol() {
+    const hiddenInput = document.getElementById('stock-select');
+    if (hiddenInput) {
+        return hiddenInput.value;
+    }
+    
+    // Fallback: find selected button
+    const selectedButton = document.querySelector('.stock-btn.selected');
+    if (selectedButton) {
+        return selectedButton.getAttribute('data-symbol');
+    }
+    
+    return '';
+}
+
+function showAnalyticsSection() {
+    const analyticsSection = document.querySelector('.analytics-section');
+    if (analyticsSection) {
+        analyticsSection.style.display = 'block';
+        analyticsSection.style.opacity = '1';
+        analyticsSection.style.transform = 'translateY(0)';
+        analyticsSection.style.transition = 'all 0.3s ease';
+    }
+    
+    // Ensure metrics card is visible
+    const metricsCard = document.getElementById('metrics-card');
+    if (metricsCard) {
+        metricsCard.style.display = 'block';
+        metricsCard.style.opacity = '1';
+        metricsCard.style.transform = 'translateY(0)';
+        metricsCard.style.transition = 'all 0.3s ease';
+    }
+}
+
+function hideAnalyticsSection() {
+    const analyticsSection = document.querySelector('.analytics-section');
+    if (analyticsSection) {
+        analyticsSection.style.opacity = '0';
+        analyticsSection.style.transform = 'translateY(-10px)';
+        analyticsSection.style.transition = 'all 0.3s ease';
+        
+        // Hide completely after animation
+        setTimeout(() => {
+            analyticsSection.style.display = 'none';
+        }, 300);
+    }
+}
