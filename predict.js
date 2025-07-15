@@ -354,53 +354,92 @@ function displayMetricsData(data) {
         const trainRMSE = data.train_mse ? Math.sqrt(data.train_mse) : 0;
         const testRMSE = data.test_mse ? Math.sqrt(data.test_mse) : 0;
         
+        // Determine overall performance based on R² scores
+        const avgR2 = ((data.train_r2 || 0) + (data.test_r2 || 0)) / 2;
+        let performance = 'poor';
+        if (avgR2 > 0.8) {
+            performance = 'excellent';
+        } else if (avgR2 > 0.6) {
+            performance = 'good';
+        }
+        
         metricsDisplay.innerHTML = `
             <div class="metrics-data">
-                <div class="metrics-section">
-                    <h3>Training Metrics</h3>
-                    <div class="metric-item">
-                        <h4>Train MAE</h4>
-                        <span>${parseFloat(data.train_mae || 0).toFixed(6)}</span>
+                <div class="metrics-header">
+                    <h3>Model Metrics for ${data.symbol}</h3>
+                    <p class="model-info">Performance evaluation metrics</p>
+                    <p class="metrics-summary">Training and testing accuracy measures</p>
+                </div>
+                
+                <div class="metrics-counts">
+                    <div class="metrics-section training">
+                        <h3>Training Metrics</h3>
+                        <div class="metrics-stats">
+                            <div class="metric-group">
+                                <div class="metric-name">Mean Absolute Error</div>
+                                <div class="metric-value">${parseFloat(data.train_mae || 0).toFixed(6)}</div>
+                                <div class="metric-description">Average prediction error</div>
+                            </div>
+                            <div class="metric-group">
+                                <div class="metric-name">Mean Squared Error</div>
+                                <div class="metric-value">${parseFloat(data.train_mse || 0).toFixed(6)}</div>
+                                <div class="metric-description">Squared prediction error</div>
+                            </div>
+                            <div class="metric-group">
+                                <div class="metric-name">Root Mean Squared Error</div>
+                                <div class="metric-value">${trainRMSE.toFixed(6)}</div>
+                                <div class="metric-description">Standard deviation of errors</div>
+                            </div>
+                            <div class="metric-group">
+                                <div class="metric-name">R² Score</div>
+                                <div class="metric-value">${parseFloat(data.train_r2 || 0).toFixed(6)}</div>
+                                <div class="metric-description">Coefficient of determination</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="metric-item">
-                        <h4>Train MSE</h4>
-                        <span>${parseFloat(data.train_mse || 0).toFixed(6)}</span>
+                    
+                    <div class="metrics-section testing">
+                        <h3>Testing Metrics</h3>
+                        <div class="metrics-stats">
+                            <div class="metric-group">
+                                <div class="metric-name">Mean Absolute Error</div>
+                                <div class="metric-value">${parseFloat(data.test_mae || 0).toFixed(6)}</div>
+                                <div class="metric-description">Average prediction error</div>
+                            </div>
+                            <div class="metric-group">
+                                <div class="metric-name">Mean Squared Error</div>
+                                <div class="metric-value">${parseFloat(data.test_mse || 0).toFixed(6)}</div>
+                                <div class="metric-description">Squared prediction error</div>
+                            </div>
+                            <div class="metric-group">
+                                <div class="metric-name">Root Mean Squared Error</div>
+                                <div class="metric-value">${testRMSE.toFixed(6)}</div>
+                                <div class="metric-description">Standard deviation of errors</div>
+                            </div>
+                            <div class="metric-group">
+                                <div class="metric-name">R² Score</div>
+                                <div class="metric-value">${parseFloat(data.test_r2 || 0).toFixed(6)}</div>
+                                <div class="metric-description">Coefficient of determination</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="metric-item">
-                        <h4>Train RMSE</h4>
-                        <span>${trainRMSE.toFixed(6)}</span>
-                    </div>
-                    <div class="metric-item">
-                        <h4>Train R²</h4>
-                        <span>${parseFloat(data.train_r2 || 0).toFixed(6)}</span>
+                    
+                    <div class="metrics-section symbol">
+                        <h3>Symbol Info</h3>
+                        <div class="metrics-stats">
+                            <div class="metric-group">
+                                <div class="metric-name">Stock Symbol</div>
+                                <div class="metric-value">${data.symbol || 'N/A'}</div>
+                                <div class="metric-description">Selected stock ticker</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="metrics-section">
-                    <h3>Test Metrics</h3>
-                    <div class="metric-item">
-                        <h4>Test MAE</h4>
-                        <span>${parseFloat(data.test_mae || 0).toFixed(6)}</span>
-                    </div>
-                    <div class="metric-item">
-                        <h4>Test MSE</h4>
-                        <span>${parseFloat(data.test_mse || 0).toFixed(6)}</span>
-                    </div>
-                    <div class="metric-item">
-                        <h4>Test RMSE</h4>
-                        <span>${testRMSE.toFixed(6)}</span>
-                    </div>
-                    <div class="metric-item">
-                        <h4>Test R²</h4>
-                        <span>${parseFloat(data.test_r2 || 0).toFixed(6)}</span>
-                    </div>
-                </div>
-                
-                <div class="metrics-section">
-                    <h3>Symbol</h3>
-                    <div class="metric-item">
-                        <h4>Symbol</h4>
-                        <span class="symbol-value">${data.symbol || 'N/A'}</span>
+                <div class="metrics-overview">
+                    <div class="performance-summary">
+                        <h4>Overall Performance</h4>
+                        <span class="performance-badge ${performance}">${performance.charAt(0).toUpperCase() + performance.slice(1)}</span>
                     </div>
                 </div>
             </div>
