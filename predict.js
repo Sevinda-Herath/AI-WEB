@@ -17,11 +17,15 @@ function initializePredictSection() {
     
     if (resultCard) resultCard.style.display = 'none';
     if (loadingSpinner) loadingSpinner.style.display = 'none';
+    
+    // Initialize sentiment section visibility
+    initializeSentimentSection();
 }
 
 function setupEventListeners() {
     const predictBtn = document.getElementById('predict-btn');
     const stockSelect = document.getElementById('stock-select');
+    const modelSelect = document.getElementById('model-select');
     const downloadMetrics = document.getElementById('download-metrics');
     const viewCharts = document.getElementById('view-charts');
     const downloadSentimentChart = document.getElementById('download-sentiment-chart');
@@ -34,6 +38,10 @@ function setupEventListeners() {
 
     if (stockSelect) {
         stockSelect.addEventListener('change', handleStockChange);
+    }
+
+    if (modelSelect) {
+        modelSelect.addEventListener('change', handleModelChange);
     }
 
     if (downloadMetrics) {
@@ -62,13 +70,20 @@ async function handlePrediction() {
     const days = document.getElementById('days-input').value;
     const model = document.getElementById('model-select').value;
 
-    if (!stockSymbol) {
+    // Enhanced validation
+    if (!stockSymbol || stockSymbol.trim() === '') {
         showAlert('Please select a stock symbol', 'error');
         return;
     }
 
-    if (!days || days < 30 || days > 120) {
+    if (!days || isNaN(days) || days < 30 || days > 120) {
         showAlert('Please enter a valid number of days (30-120)', 'error');
+        document.getElementById('days-input').focus();
+        return;
+    }
+
+    if (!model || model.trim() === '') {
+        showAlert('Please select a model type', 'error');
         return;
     }
 
@@ -91,6 +106,9 @@ async function handlePrediction() {
         displayPredictionResult(data);
         await loadModelMetrics(stockSymbol, model);
         
+        // Show success message
+        showAlert(`Prediction completed successfully for ${stockSymbol}!`, 'success');
+        
     } catch (error) {
         console.error('Prediction error:', error);
         showAlert(`Prediction failed: ${error.message}`, 'error');
@@ -101,13 +119,67 @@ async function handlePrediction() {
 
 async function handleStockChange() {
     const stockSymbol = document.getElementById('stock-select').value;
+    const model = document.getElementById('model-select').value;
     
-    if (stockSymbol) {
+    // Only show sentiment data if LSTM+Sentiment model is selected
+    if (stockSymbol && model === 'lstm_sentiment') {
+        showSentimentLoading();
         await loadSentimentData(stockSymbol);
         enableDownloadButton('download-sentiment-chart');
     } else {
-        clearSentimentData();
+        hideSentimentSection();
         disableDownloadButton('download-sentiment-chart');
+    }
+}
+
+async function handleModelChange() {
+    const stockSymbol = document.getElementById('stock-select').value;
+    const model = document.getElementById('model-select').value;
+    
+    // Show/hide sentiment section based on model selection
+    if (model === 'lstm_sentiment') {
+        showSentimentSection();
+        if (stockSymbol) {
+            showSentimentLoading();
+            await loadSentimentData(stockSymbol);
+            enableDownloadButton('download-sentiment-chart');
+        } else {
+            clearSentimentData();
+            disableDownloadButton('download-sentiment-chart');
+        }
+    } else {
+        hideSentimentSection();
+        disableDownloadButton('download-sentiment-chart');
+    }
+}
+
+function showSentimentSection() {
+    const sentimentCard = document.getElementById('sentiment-card');
+    if (sentimentCard) {
+        sentimentCard.style.display = 'block';
+        sentimentCard.style.opacity = '1';
+        sentimentCard.style.transform = 'translateY(0)';
+        sentimentCard.style.transition = 'all 0.3s ease';
+    }
+}
+
+function hideSentimentSection() {
+    const sentimentCard = document.getElementById('sentiment-card');
+    if (sentimentCard) {
+        sentimentCard.style.opacity = '0';
+        sentimentCard.style.transform = 'translateY(-10px)';
+        sentimentCard.style.transition = 'all 0.3s ease';
+        
+        // Hide completely after animation
+        setTimeout(() => {
+            sentimentCard.style.display = 'none';
+        }, 300);
+    }
+    
+    // Clear sentiment data
+    const sentimentSummary = document.getElementById('sentiment-summary');
+    if (sentimentSummary) {
+        sentimentSummary.innerHTML = '';
     }
 }
 
@@ -121,16 +193,22 @@ async function loadSentimentData(symbol) {
         
         const data = await response.json();
         displaySentimentData(data);
+        hideSentimentLoading();
         
     } catch (error) {
         console.error('Sentiment loading error:', error);
         document.getElementById('sentiment-summary').innerHTML = 
-            `<p>Sentiment data not available for ${symbol}</p>`;
+            `<div class="error-message">
+                <p>❌ Sentiment data not available for ${symbol}</p>
+                <p class="error-details">${error.message}</p>
+            </div>`;
+        hideSentimentLoading();
     }
 }
 
 async function loadModelMetrics(symbol, model) {
     try {
+        showMetricsLoading();
         const endpoint = model === 'lstm' ? '/metrics/lstm' : '/metrics/lstm_sentiment';
         const response = await fetch(`${API_BASE_URL}${endpoint}/${symbol}`);
         
@@ -142,11 +220,16 @@ async function loadModelMetrics(symbol, model) {
         displayMetricsData(data);
         enableDownloadButton('download-test-chart');
         enableDownloadButton('download-loss-chart');
+        hideMetricsLoading();
         
     } catch (error) {
         console.error('Metrics loading error:', error);
         document.getElementById('metrics-display').innerHTML = 
-            `<p>Metrics data not available</p>`;
+            `<div class="error-message">
+                <p>❌ Metrics data not available for ${symbol}</p>
+                <p class="error-details">${error.message}</p>
+            </div>`;
+        hideMetricsLoading();
     }
 }
 
@@ -158,7 +241,10 @@ function displayPredictionResult(data) {
 
     if (resultSymbol) resultSymbol.textContent = data.stock;
     if (resultDate) resultDate.textContent = new Date(data.date).toLocaleDateString();
-    if (predictedPrice) predictedPrice.textContent = `$${data.predicted_price_for_tommorow}`;
+    
+    // Round predicted price to 2 decimal places
+    const roundedPrice = parseFloat(data.predicted_price_for_tommorow).toFixed(2);
+    if (predictedPrice) predictedPrice.textContent = `$${roundedPrice}`;
 
     if (resultCard) {
         resultCard.style.display = 'block';
@@ -170,23 +256,66 @@ function displaySentimentData(data) {
     const sentimentSummary = document.getElementById('sentiment-summary');
     
     if (sentimentSummary) {
+        // Calculate percentages from counts
+        const totalArticles = data.total_articles || 0;
+        const positiveCount = data.positive_count || 0;
+        const neutralCount = data.neutral_count || 0;
+        const negativeCount = data.negative_count || 0;
+        
+        const positivePercentage = totalArticles > 0 ? (positiveCount / totalArticles * 100) : 0;
+        const neutralPercentage = totalArticles > 0 ? (neutralCount / totalArticles * 100) : 0;
+        const negativePercentage = totalArticles > 0 ? (negativeCount / totalArticles * 100) : 0;
+        
+        // Determine overall sentiment based on highest count
+        let overallSentiment = 'neutral';
+        if (positiveCount > neutralCount && positiveCount > negativeCount) {
+            overallSentiment = 'positive';
+        } else if (negativeCount > neutralCount && negativeCount > positiveCount) {
+            overallSentiment = 'negative';
+        }
+        
         sentimentSummary.innerHTML = `
             <div class="sentiment-data">
-                <div class="sentiment-item">
-                    <h4>Positive</h4>
-                    <span>${data.positive_percentage || 0}%</span>
+                <div class="sentiment-header">
+                    <h3>Sentiment Analysis for ${data.symbol}</h3>
+                    <p class="date-collected">Data collected: ${new Date(data.date_collected).toLocaleDateString()}</p>
+                    <p class="total-articles">Total articles analyzed: ${totalArticles}</p>
                 </div>
-                <div class="sentiment-item">
-                    <h4>Negative</h4>
-                    <span>${data.negative_percentage || 0}%</span>
+                
+                <div class="sentiment-counts">
+                    <div class="sentiment-item positive">
+                        <h4>Positive</h4>
+                        <div class="sentiment-stats">
+                            <span class="count">${positiveCount} articles</span>
+                            <span class="percentage">${positivePercentage.toFixed(1)}%</span>
+                            <span class="confidence">Avg confidence: ${(data.avg_confidence_positive * 100).toFixed(1)}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sentiment-item neutral">
+                        <h4>Neutral</h4>
+                        <div class="sentiment-stats">
+                            <span class="count">${neutralCount} articles</span>
+                            <span class="percentage">${neutralPercentage.toFixed(1)}%</span>
+                            <span class="confidence">Avg confidence: ${(data.avg_confidence_neutral * 100).toFixed(1)}%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sentiment-item negative">
+                        <h4>Negative</h4>
+                        <div class="sentiment-stats">
+                            <span class="count">${negativeCount} articles</span>
+                            <span class="percentage">${negativePercentage.toFixed(1)}%</span>
+                            <span class="confidence">Avg confidence: ${(data.avg_confidence_negative * 100).toFixed(1)}%</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="sentiment-item">
-                    <h4>Neutral</h4>
-                    <span>${data.neutral_percentage || 0}%</span>
-                </div>
-                <div class="sentiment-item">
-                    <h4>Overall</h4>
-                    <span>${data.overall_sentiment || 'N/A'}</span>
+                
+                <div class="sentiment-summary">
+                    <div class="overall-sentiment">
+                        <h4>Overall Sentiment</h4>
+                        <span class="sentiment-badge ${overallSentiment}">${overallSentiment.charAt(0).toUpperCase() + overallSentiment.slice(1)}</span>
+                    </div>
                 </div>
             </div>
         `;
@@ -197,27 +326,58 @@ function displayMetricsData(data) {
     const metricsDisplay = document.getElementById('metrics-display');
     
     if (metricsDisplay) {
+        // Calculate RMSE from MSE if not provided
+        const trainRMSE = data.train_mse ? Math.sqrt(data.train_mse) : 0;
+        const testRMSE = data.test_mse ? Math.sqrt(data.test_mse) : 0;
+        
         metricsDisplay.innerHTML = `
             <div class="metrics-data">
-                <div class="metric-item">
-                    <h4>MSE</h4>
-                    <span>${parseFloat(data.mse || 0).toFixed(4)}</span>
+                <div class="metrics-section">
+                    <h3>Training Metrics</h3>
+                    <div class="metric-item">
+                        <h4>Train MAE</h4>
+                        <span>${parseFloat(data.train_mae || 0).toFixed(6)}</span>
+                    </div>
+                    <div class="metric-item">
+                        <h4>Train MSE</h4>
+                        <span>${parseFloat(data.train_mse || 0).toFixed(6)}</span>
+                    </div>
+                    <div class="metric-item">
+                        <h4>Train RMSE</h4>
+                        <span>${trainRMSE.toFixed(6)}</span>
+                    </div>
+                    <div class="metric-item">
+                        <h4>Train R²</h4>
+                        <span>${parseFloat(data.train_r2 || 0).toFixed(6)}</span>
+                    </div>
                 </div>
-                <div class="metric-item">
-                    <h4>RMSE</h4>
-                    <span>${parseFloat(data.rmse || 0).toFixed(4)}</span>
+                
+                <div class="metrics-section">
+                    <h3>Test Metrics</h3>
+                    <div class="metric-item">
+                        <h4>Test MAE</h4>
+                        <span>${parseFloat(data.test_mae || 0).toFixed(6)}</span>
+                    </div>
+                    <div class="metric-item">
+                        <h4>Test MSE</h4>
+                        <span>${parseFloat(data.test_mse || 0).toFixed(6)}</span>
+                    </div>
+                    <div class="metric-item">
+                        <h4>Test RMSE</h4>
+                        <span>${testRMSE.toFixed(6)}</span>
+                    </div>
+                    <div class="metric-item">
+                        <h4>Test R²</h4>
+                        <span>${parseFloat(data.test_r2 || 0).toFixed(6)}</span>
+                    </div>
                 </div>
-                <div class="metric-item">
-                    <h4>MAE</h4>
-                    <span>${parseFloat(data.mae || 0).toFixed(4)}</span>
-                </div>
-                <div class="metric-item">
-                    <h4>R²</h4>
-                    <span>${parseFloat(data.r2_score || 0).toFixed(4)}</span>
-                </div>
-                <div class="metric-item">
-                    <h4>MAPE</h4>
-                    <span>${parseFloat(data.mape || 0).toFixed(2)}%</span>
+                
+                <div class="metrics-section">
+                    <h3>Symbol</h3>
+                    <div class="metric-item">
+                        <h4>Symbol</h4>
+                        <span class="symbol-value">${data.symbol || 'N/A'}</span>
+                    </div>
                 </div>
             </div>
         `;
@@ -227,7 +387,31 @@ function displayMetricsData(data) {
 function clearSentimentData() {
     const sentimentSummary = document.getElementById('sentiment-summary');
     if (sentimentSummary) {
-        sentimentSummary.innerHTML = '<p>Select a stock to view sentiment analysis</p>';
+        sentimentSummary.innerHTML = `
+            <div class="sentiment-placeholder">
+                <div class="placeholder-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <p class="placeholder-text">Select a stock symbol to view sentiment analysis</p>
+                <p class="placeholder-hint">Market sentiment data will appear here</p>
+            </div>
+        `;
+    }
+}
+
+function initializeSentimentSection() {
+    const model = document.getElementById('model-select').value;
+    const stockSymbol = document.getElementById('stock-select').value;
+    
+    if (model === 'lstm_sentiment') {
+        showSentimentSection();
+        if (stockSymbol) {
+            loadSentimentData(stockSymbol);
+        } else {
+            clearSentimentData();
+        }
+    } else {
+        hideSentimentSection();
     }
 }
 
@@ -242,6 +426,40 @@ function showLoading() {
 function hideLoading() {
     const loadingSpinner = document.getElementById('loading-spinner');
     if (loadingSpinner) loadingSpinner.style.display = 'none';
+}
+
+function showSentimentLoading() {
+    const sentimentSummary = document.getElementById('sentiment-summary');
+    if (sentimentSummary) {
+        sentimentSummary.innerHTML = `
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading sentiment data...</p>
+            </div>
+        `;
+    }
+}
+
+function hideSentimentLoading() {
+    // This function is called after displaySentimentData or error handling
+    // so no need to clear the loading state manually
+}
+
+function showMetricsLoading() {
+    const metricsDisplay = document.getElementById('metrics-display');
+    if (metricsDisplay) {
+        metricsDisplay.innerHTML = `
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Loading model metrics...</p>
+            </div>
+        `;
+    }
+}
+
+function hideMetricsLoading() {
+    // This function is called after displayMetricsData or error handling
+    // so no need to clear the loading state manually
 }
 
 function enableDownloadButton(buttonId) {
@@ -262,7 +480,7 @@ async function downloadChart(type) {
     const stockSymbol = document.getElementById('stock-select').value;
     const model = document.getElementById('model-select').value;
     
-    if (!stockSymbol) {
+    if (!stockSymbol || stockSymbol.trim() === '') {
         showAlert('Please select a stock symbol first', 'error');
         return;
     }
@@ -295,6 +513,9 @@ async function downloadChart(type) {
     }
     
     try {
+        // Show loading for download
+        showAlert('Preparing download...', 'info');
+        
         const response = await fetch(`${API_BASE_URL}${endpoint}`);
         
         if (!response.ok) {
@@ -302,6 +523,12 @@ async function downloadChart(type) {
         }
         
         const blob = await response.blob();
+        
+        // Check if the response is actually an image
+        if (!blob.type.startsWith('image/')) {
+            throw new Error('Invalid response format - expected image');
+        }
+        
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -323,28 +550,45 @@ function handleDownloadMetrics() {
     const stockSymbol = document.getElementById('stock-select').value;
     const model = document.getElementById('model-select').value;
     
-    if (!stockSymbol) {
+    if (!stockSymbol || stockSymbol.trim() === '') {
         showAlert('Please select a stock symbol first', 'error');
         return;
     }
     
-    const endpoint = model === 'lstm' ? 
-        `/metrics/lstm/${stockSymbol}` : 
-        `/metrics/lstm_sentiment/${stockSymbol}`;
+    if (!model || model.trim() === '') {
+        showAlert('Please select a model type first', 'error');
+        return;
+    }
     
-    // Create CSV download from the displayed metrics
     const metricsDisplay = document.getElementById('metrics-display');
-    if (metricsDisplay && metricsDisplay.querySelector('.metrics-data')) {
-        const metrics = metricsDisplay.querySelectorAll('.metric-item');
-        let csvContent = 'Metric,Value\n';
+    if (!metricsDisplay || !metricsDisplay.querySelector('.metrics-data')) {
+        showAlert('No metrics data available to download. Please run a prediction first.', 'error');
+        return;
+    }
+    
+    try {
+        let csvContent = 'Category,Metric,Value\n';
         
-        metrics.forEach(metric => {
-            const name = metric.querySelector('h4').textContent;
-            const value = metric.querySelector('span').textContent;
-            csvContent += `${name},${value}\n`;
+        // Get all metrics sections
+        const metricsSections = metricsDisplay.querySelectorAll('.metrics-section');
+        
+        metricsSections.forEach(section => {
+            const sectionTitle = section.querySelector('h3')?.textContent.trim() || 'Metrics';
+            const metrics = section.querySelectorAll('.metric-item');
+            
+            metrics.forEach(metric => {
+                const nameElement = metric.querySelector('h4');
+                const valueElement = metric.querySelector('span');
+                
+                if (nameElement && valueElement) {
+                    const name = nameElement.textContent.trim();
+                    const value = valueElement.textContent.trim();
+                    csvContent += `"${sectionTitle}","${name}","${value}"\n`;
+                }
+            });
         });
         
-        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -355,8 +599,10 @@ function handleDownloadMetrics() {
         window.URL.revokeObjectURL(url);
         
         showAlert(`Metrics downloaded successfully!`, 'success');
-    } else {
-        showAlert('No metrics data available to download', 'error');
+        
+    } catch (error) {
+        console.error('Download metrics error:', error);
+        showAlert(`Failed to download metrics: ${error.message}`, 'error');
     }
 }
 
@@ -381,6 +627,14 @@ function showAlert(message, type) {
     alertDiv.className = `alert alert-${type}`;
     alertDiv.textContent = message;
     
+    // Define alert colors
+    const alertColors = {
+        error: 'linear-gradient(135deg, #ff4757, #ff3838)',
+        success: 'linear-gradient(135deg, #2ed573, #2ed573)',
+        info: 'linear-gradient(135deg, #3742fa, #2f3542)',
+        warning: 'linear-gradient(135deg, #ffa502, #ff6348)'
+    };
+    
     // Style the alert
     Object.assign(alertDiv.style, {
         position: 'fixed',
@@ -396,10 +650,14 @@ function showAlert(message, type) {
         opacity: '0',
         transform: 'translateY(-20px)',
         transition: 'all 0.3s ease',
-        background: type === 'error' ? 
-            'linear-gradient(135deg, #ff4757, #ff3838)' : 
-            'linear-gradient(135deg, #2ed573, #2ed573)',
-        boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
+        background: alertColors[type] || alertColors.info,
+        boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+        cursor: 'pointer'
+    });
+    
+    // Add click to dismiss
+    alertDiv.addEventListener('click', () => {
+        dismissAlert(alertDiv);
     });
     
     document.body.appendChild(alertDiv);
@@ -410,16 +668,23 @@ function showAlert(message, type) {
         alertDiv.style.transform = 'translateY(0)';
     }, 10);
     
-    // Remove after delay
+    // Remove after delay (longer for error messages)
+    const delay = type === 'error' ? 6000 : 4000;
     setTimeout(() => {
-        alertDiv.style.opacity = '0';
-        alertDiv.style.transform = 'translateY(-20px)';
-        setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.parentNode.removeChild(alertDiv);
-            }
-        }, 300);
-    }, 4000);
+        if (alertDiv.parentNode) {
+            dismissAlert(alertDiv);
+        }
+    }, delay);
+}
+
+function dismissAlert(alertDiv) {
+    alertDiv.style.opacity = '0';
+    alertDiv.style.transform = 'translateY(-20px)';
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+        }
+    }, 300);
 }
 
 function createPredictIcon() {
@@ -471,15 +736,88 @@ function createPredictIcon() {
 // Health check function
 async function checkAPIHealth() {
     try {
-        const response = await fetch(`${API_BASE_URL}/health`);
+        const response = await fetch(`${API_BASE_URL}/`);
         const data = await response.json();
         console.log('API Health:', data);
+        
+        // Update UI to show API status
+        updateAPIStatus(data.status === 'ok');
         return data.status === 'ok';
     } catch (error) {
         console.error('API Health check failed:', error);
+        updateAPIStatus(false);
         return false;
+    }
+}
+
+// Update API status indicator
+function updateAPIStatus(isHealthy) {
+    const statusIndicator = document.getElementById('api-status');
+    if (statusIndicator) {
+        statusIndicator.className = isHealthy ? 'api-status healthy' : 'api-status unhealthy';
+        statusIndicator.textContent = isHealthy ? 'API Online' : 'API Offline';
     }
 }
 
 // Initialize API health check
 checkAPIHealth();
+
+// Set up periodic health checks (every 30 seconds)
+setInterval(checkAPIHealth, 30000);
+
+// Add keyboard shortcuts for better UX
+document.addEventListener('keydown', function(event) {
+    // Enter key to trigger prediction if focus is on days input
+    if (event.key === 'Enter' && event.target.id === 'days-input') {
+        handlePrediction();
+    }
+    
+    // Escape key to dismiss any visible alerts
+    if (event.key === 'Escape') {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            if (alert.parentNode) {
+                dismissAlert(alert);
+            }
+        });
+    }
+});
+
+// Add form validation helper
+function validateForm() {
+    const stockSymbol = document.getElementById('stock-select').value;
+    const days = document.getElementById('days-input').value;
+    const model = document.getElementById('model-select').value;
+    
+    const isValid = stockSymbol && days && days >= 30 && days <= 120 && model;
+    
+    const predictBtn = document.getElementById('predict-btn');
+    if (predictBtn) {
+        predictBtn.disabled = !isValid;
+        predictBtn.style.opacity = isValid ? '1' : '0.6';
+    }
+    
+    return isValid;
+}
+
+// Add input listeners for real-time validation
+document.addEventListener('DOMContentLoaded', function() {
+    const stockSelect = document.getElementById('stock-select');
+    const daysInput = document.getElementById('days-input');
+    const modelSelect = document.getElementById('model-select');
+    
+    [stockSelect, daysInput, modelSelect].forEach(element => {
+        if (element) {
+            element.addEventListener('input', validateForm);
+            element.addEventListener('change', validateForm);
+        }
+    });
+    
+    // Initial validation
+    validateForm();
+    
+    // Initialize sentiment section on page load
+    setTimeout(() => {
+        initializeSentimentSection();
+    }, 100);
+});
