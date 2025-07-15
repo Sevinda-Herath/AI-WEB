@@ -7,6 +7,11 @@
     <link rel="icon" href="./img/logo.png" type="image/x-icon">
 
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./predict.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 </head>
 <body>
     <!-- Main Content -->
@@ -37,7 +42,123 @@
         </div>
 
         <!-- Predict Content -->
-        <div class="predict-content"></div>
+        <div class="predict-content">
+            <div class="predict-hero">
+                <div class="predict-hero-content">
+                    <div class="predict-icon">
+                        <canvas id="predict-icon" width="120" height="120"></canvas>
+                    </div>
+                    <h1>AI Stock Prediction</h1>
+                    <p class="predict-subtitle">Get tomorrow's stock price predictions using advanced LSTM models</p>
+                </div>
+            </div>
+
+            <div class="prediction-section">
+                <div class="prediction-controls">
+                    <div class="control-group">
+                        <label for="stock-select">Select Stock Symbol</label>
+                        <select id="stock-select" class="stock-dropdown">
+                            <option value="">Choose a stock...</option>
+                            <option value="AAPL">AAPL - Apple Inc.</option>
+                            <option value="AMZN">AMZN - Amazon.com Inc.</option>
+                            <option value="GOOGL">GOOGL - Alphabet Inc.</option>
+                            <option value="MSFT">MSFT - Microsoft Corporation</option>
+                            <option value="META">META - Meta Platforms Inc.</option>
+                            <option value="BABA">BABA - Alibaba Group</option>
+                            <option value="JD">JD - JD.com Inc.</option>
+                            <option value="T">T - AT&T Inc.</option>
+                            <option value="005930.KS">005930.KS - Samsung Electronics</option>
+                            <option value="2317.TW">2317.TW - Foxconn Technology</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="days-input">Training Days</label>
+                        <input type="number" id="days-input" class="days-input" value="60" min="30" max="120">
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="model-select">Prediction Model</label>
+                        <select id="model-select" class="model-dropdown">
+                            <option value="lstm">LSTM - Basic Model</option>
+                            <option value="lstm_sentiment">LSTM + Sentiment Analysis</option>
+                        </select>
+                    </div>
+                    
+                    <button id="predict-btn" class="predict-button">
+                        <i class="fas fa-chart-line"></i>
+                        Predict Price
+                    </button>
+                </div>
+
+                <div class="prediction-results" id="prediction-results">
+                    <div class="loading-spinner" id="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Analyzing market data...</p>
+                    </div>
+                    
+                    <div class="result-card" id="result-card">
+                        <div class="result-header">
+                            <h3 id="result-symbol"></h3>
+                            <span id="result-date"></span>
+                        </div>
+                        <div class="result-price">
+                            <span class="price-label">Tomorrow's Predicted Price</span>
+                            <span class="price-value" id="predicted-price">$0.00</span>
+                        </div>
+                        <div class="result-actions">
+                            <button id="download-metrics" class="action-btn">
+                                <i class="fas fa-download"></i>
+                                Download Metrics
+                            </button>
+                            <button id="view-charts" class="action-btn">
+                                <i class="fas fa-chart-bar"></i>
+                                View Charts
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analytics-section">
+                <h2>Model Analytics</h2>
+                <div class="analytics-grid">
+                    <div class="analytics-card" id="sentiment-card">
+                        <h3>Sentiment Analysis</h3>
+                        <div class="analytics-content">
+                            <div class="sentiment-summary" id="sentiment-summary">
+                                <p>Select a stock to view sentiment analysis</p>
+                            </div>
+                            <div class="chart-download">
+                                <button id="download-sentiment-chart" class="chart-btn" disabled>
+                                    <i class="fas fa-image"></i>
+                                    Download Sentiment Chart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card" id="metrics-card">
+                        <h3>Model Metrics</h3>
+                        <div class="analytics-content">
+                            <div class="metrics-display" id="metrics-display">
+                                <p>Run prediction to view model metrics</p>
+                            </div>
+                            <div class="chart-downloads">
+                                <button id="download-test-chart" class="chart-btn" disabled>
+                                    <i class="fas fa-chart-line"></i>
+                                    Test Predictions
+                                </button>
+                                <button id="download-loss-chart" class="chart-btn" disabled>
+                                    <i class="fas fa-chart-area"></i>
+                                    Training Loss
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <footer>
         <div class="waves">
@@ -46,6 +167,12 @@
             <div class="wave" id="wave-3"></div>
             <div class="wave" id="wave-4"></div>
         </div>
+    </footer>
+
+    <script src="./main.js"></script>
+    <script src="./predict.js"></script>
+</body>
+</html>
         <div class="footer-line-1">
             <ul>
                 <li><a href="./index.html">Home</a></li>
