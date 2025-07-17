@@ -58,6 +58,12 @@
     gap: 20px;
     margin-bottom: 30px;
 }
+.instruction-text{
+    color: #8B949E;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    line-height: 1.4;
+}
 
 .control-group {
     display: flex;
@@ -1148,6 +1154,9 @@
     .result-actions {
         flex-direction: column;
         align-items: center;
+    }
+    .instruction-text{
+        font-size: 0.7rem;
     }
     
     .chart-download, .chart-downloads {

@@ -86,8 +86,8 @@ async function handlePrediction() {
         return;
     }
 
-    if (!days || isNaN(days) || days < 30 || days > 120) {
-        showAlert('Please enter a valid number of days (30-120)', 'error');
+    if (!days || isNaN(days) || days < 1 || days > 365) {
+        showAlert('Please enter a valid number of days (1-365)', 'error');
         document.getElementById('days-input').focus();
         return;
     }
@@ -629,45 +629,51 @@ async function downloadChart(type) {
 function handleDownloadMetrics() {
     const stockSymbol = getSelectedStockSymbol();
     const model = document.getElementById('model-select').value;
-    
+
     if (!stockSymbol || stockSymbol.trim() === '') {
         showAlert('Please select a stock symbol first', 'error');
         return;
     }
-    
+
     if (!model || model.trim() === '') {
         showAlert('Please select a model type first', 'error');
         return;
     }
-    
+
+    // Try to get the metrics data from the DOM (as displayed)
     const metricsDisplay = document.getElementById('metrics-display');
     if (!metricsDisplay || !metricsDisplay.querySelector('.metrics-data')) {
         showAlert('No metrics data available to download. Please run a prediction first.', 'error');
         return;
     }
-    
+
     try {
-        let csvContent = 'Category,Metric,Value\n';
-        
-        // Get all metrics sections
-        const metricsSections = metricsDisplay.querySelectorAll('.metrics-section');
-        
-        metricsSections.forEach(section => {
-            const sectionTitle = section.querySelector('h3')?.textContent.trim() || 'Metrics';
-            const metrics = section.querySelectorAll('.metric-item');
-            
-            metrics.forEach(metric => {
-                const nameElement = metric.querySelector('h4');
-                const valueElement = metric.querySelector('span');
-                
-                if (nameElement && valueElement) {
-                    const name = nameElement.textContent.trim();
-                    const value = valueElement.textContent.trim();
-                    csvContent += `"${sectionTitle}","${name}","${value}"\n`;
-                }
-            });
-        });
-        
+        // Try to extract the metrics from the DOM
+        // If not possible, fallback to using the last API response if available
+        // For this example, we'll extract from the DOM as per the new API output
+
+        let csvContent = 'Metric,Value\n';
+
+        // Extract metrics from the DOM (as displayed)
+        const metricsMap = {
+            'Stock Symbol': stockSymbol,
+            'Model Type': model,
+            'Date': new Date().toLocaleDateString(),
+            'Train MAE': metricsDisplay.querySelector('.training .metric-group:nth-child(1) .metric-value')?.textContent.trim(),
+            'Train MSE': metricsDisplay.querySelector('.training .metric-group:nth-child(2) .metric-value')?.textContent.trim(),
+            'Train R2': metricsDisplay.querySelector('.training .metric-group:nth-child(4) .metric-value')?.textContent.trim(),
+            'Test MAE': metricsDisplay.querySelector('.testing .metric-group:nth-child(1) .metric-value')?.textContent.trim(),
+            'Test MSE': metricsDisplay.querySelector('.testing .metric-group:nth-child(2) .metric-value')?.textContent.trim(),
+            'Test R2': metricsDisplay.querySelector('.testing .metric-group:nth-child(4) .metric-value')?.textContent.trim(),
+            'Next Day Prediction': document.getElementById('predicted-price')?.textContent.replace('$', '').trim()
+        };
+
+        for (const [metric, value] of Object.entries(metricsMap)) {
+            if (value !== undefined && value !== null && value !== '') {
+                csvContent += `"${metric}","${value}"\n`;
+            }
+        }
+
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -677,9 +683,9 @@ function handleDownloadMetrics() {
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-        
+
         showAlert(`Metrics downloaded successfully!`, 'success');
-        
+
     } catch (error) {
         console.error('Download metrics error:', error);
         showAlert(`Failed to download metrics: ${error.message}`, 'error');
@@ -868,9 +874,9 @@ function validateForm() {
     const stockSymbol = getSelectedStockSymbol();
     const days = document.getElementById('days-input').value;
     const model = document.getElementById('model-select').value;
-    
-    const isValid = stockSymbol && days && days >= 30 && days <= 120 && model;
-    
+
+    const isValid = stockSymbol && days && days >= 1 && days <= 365 && model;
+
     const predictBtn = document.getElementById('predict-btn');
     if (predictBtn) {
         predictBtn.disabled = !isValid;

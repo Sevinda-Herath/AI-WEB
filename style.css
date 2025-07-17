@@ -122,6 +122,12 @@ body {
     opacity: 0;
     animation: fadeIn 1s ease-in forwards;
 }
+.pre-nav-logo a{
+    text-decoration: none;
+}
+.pre-nav-logo p:hover{
+    color: #6b61f8;
+}
 .pre-nav-links a:hover {
     color: #6b61f8;
 }
@@ -789,10 +795,10 @@ footer .wave#wave-4{
     transform: translateY(-10px);
 }
 
-.profile-avatar {
-    font-size: 5rem;
-    color: #6b61f8;
-    margin-bottom: 20px;
+.profile-avatar img {
+    width: 98px;
+    height: auto;
+    border-radius: 50%;
 }
 
 .profile-card h4 {
@@ -942,6 +948,9 @@ footer .wave#wave-4{
     .hero-features {
         flex-wrap: wrap;
         gap: 25px;
+    }
+    .profile-avatar img {
+    width: 64px;
     }
     
     .feature-item {

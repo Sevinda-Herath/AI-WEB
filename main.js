@@ -115,26 +115,45 @@ document.addEventListener('DOMContentLoaded', () => {
     sectionCards.forEach(card => observer.observe(card));
 });
 
-// Animated counter for stats
+/**
+ * Animated counter for stats with scale effect, matching the HTML display.
+ * - Accuracy: shows "Excellent" (no animation)
+ * - Lines of Code: animates from 0 to "10,000+"
+ * - Real-time Analysis: animates from 0 to "24/7"
+ */
 function animateCounter(element, target, duration = 2000) {
-    const start = 0;
-    const increment = target / (duration / 16);
+    // Determine which stat to animate based on the label or initial text
+    const label = element.nextElementSibling?.textContent?.trim() || '';
+    if (label === 'Accuracy') {
+        // Show "Excellent" stat (no animation)
+        element.textContent = 'Excellent';
+        return;
+    }
+
+    let start = 0;
+    let end = target;
+    let formatFn = (val) => Math.floor(val);
+
+    if (label === 'Lines of Code') {
+        end = 10000;
+        formatFn = (val) => `${Math.floor(val).toLocaleString()}+`;
+    } else if (label === 'Real-time Analysis') {
+        end = 24;
+        formatFn = (val) => `${Math.floor(val)}/7`;
+    }
+
+    element.style.animation = 'countUp 2s ease-out';
+
     let current = start;
-    
+    const increment = end / (duration / 16);
+
     const timer = setInterval(() => {
         current += increment;
-        if (current >= target) {
-            current = target;
+        if (current >= end) {
+            current = end;
             clearInterval(timer);
         }
-        
-        if (target === 95) {
-            element.textContent = Math.floor(current) + '%';
-        } else if (target === 10000) {
-            element.textContent = Math.floor(current).toLocaleString() + '+';
-        } else {
-            element.textContent = current.toFixed(0);
-        }
+        element.textContent = formatFn(current);
     }, 16);
 }
 
