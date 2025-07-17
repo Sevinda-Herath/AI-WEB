@@ -512,7 +512,7 @@
 }
 
 .stat-number {
-    font-size: 2.2rem;
+    font-size: 1.2em;
     font-weight: 800;
     color: #6b61f8;
     z-index: 3;
@@ -522,7 +522,7 @@
 }
 
 .stat-label {
-    font-size: 0.9rem;
+    font-size: 0.6rem;
     color: #8B949E;
     z-index: 3;
     position: relative;
@@ -590,7 +590,6 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: linear-gradient(45deg, #6b61f8, #F78166);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -655,12 +654,18 @@
     line-height: 1.6;
     margin-bottom: 30px;
 }
+.about-avatar img{
+    width: 150px;
+    height: auto;
+    border-radius: 50%;
+}
 
 .skills {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 30px;
+    justify-content: center;
 }
 
 .skill-tag {
@@ -912,7 +917,7 @@
     }
     
     .stat-number {
-        font-size: 1.8rem;
+        font-size: 0.9rem;
     }
     
     .developer-card {
@@ -1020,11 +1025,11 @@
     }
     
     .stat-number {
-        font-size: 1.6rem;
+        font-size: 0.8rem;
     }
     
     .stat-label {
-        font-size: 0.8rem;
+        font-size: 0.6rem;
     }
     
     .developer-card {
@@ -1041,7 +1046,9 @@
         height: 100px;
         font-size: 2.5rem;
     }
-    
+    .about-avatar img{
+    width: 72px;
+    }
     .skills {
         justify-content: center;
     }
@@ -1162,11 +1169,11 @@
     }
     
     .stat-number {
-        font-size: 1.5rem;
+        font-size: 0.8rem;
     }
     
     .stat-label {
-        font-size: 0.75rem;
+        font-size: 0.55rem;
     }
     
     .developer-card {

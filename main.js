@@ -519,33 +519,32 @@ function initAboutPageAnimations() {
 }
 
 function animateStatNumber(element) {
-    const target = parseInt(element.getAttribute('data-target'));
-    const duration = 2000;
-    const start = 0;
-    const increment = target / (duration / 16);
-    let current = start;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        
-        // Format different types of numbers
-        if (target === 95) {
-            element.textContent = Math.floor(current) + '%';
-        } else if (target === 1000) {
-            element.textContent = Math.floor(current).toLocaleString() + '+';
-        } else if (target === 24) {
-            element.textContent = Math.floor(current) + '/7';
-        } else {
-            element.textContent = Math.floor(current);
-        }
-    }, 16);
-    
-    // Add scale animation
-    element.style.animation = 'countUp 2s ease-out';
+    const label = element.parentElement.querySelector('.stat-label')?.textContent?.trim() || '';
+    if (label === 'Accuracy') {
+        element.textContent = 'Excellent';
+        return;
+    }
+    if (label === 'Lines of Code') {
+         element.textContent = '10,000+';
+        return;
+    }
+    if (label === 'Hours Uptime') {
+        // Animate from 0 to 24/7
+        const target = 24;
+        const duration = 2000;
+        let current = 0;
+        const increment = target / (duration / 16);
+        element.style.animation = 'countUp 2s ease-out';
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = `${Math.floor(current)}/7`;
+        }, 16);
+        return;
+    }
 }
 
 function typeWriterEffect(element, text, speed = 100) {
