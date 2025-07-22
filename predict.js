@@ -86,8 +86,8 @@ async function handlePrediction() {
         return;
     }
 
-    if (!days || isNaN(days) || days < 1 || days > 365) {
-        showAlert('Please enter a valid number of days (1-365)', 'error');
+    if (!days || isNaN(days) || days < 1 || days > 60) {
+        showAlert('Please enter a valid number of days (1-60)', 'error');
         document.getElementById('days-input').focus();
         return;
     }
@@ -875,7 +875,7 @@ function validateForm() {
     const days = document.getElementById('days-input').value;
     const model = document.getElementById('model-select').value;
 
-    const isValid = stockSymbol && days && days >= 1 && days <= 365 && model;
+    const isValid = stockSymbol && days && days >= 1 && days <= 60 && model;
 
     const predictBtn = document.getElementById('predict-btn');
     if (predictBtn) {
